@@ -22,7 +22,7 @@ import { PlatformModule } from './platform/platform.module';
     LandingModule,
     PlatformModule,
     //Ng2APIModule.forRoot(environment.apiUrl, []),
-    MaterialModule.forRoot(),
+    //MaterialModule.forRoot(),
 
     AppRoutes
 
