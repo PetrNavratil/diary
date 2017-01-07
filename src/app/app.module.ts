@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { Ng2APIModule } from '@flowup/ng2-api';
 import { environment } from '../environments/environment';
+import { MaterialModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,9 @@ import { environment } from '../environments/environment';
     BrowserModule,
     FormsModule,
     HttpModule,
-    //Ng2APIModule.forRoot(environment.apiUrl, [])
+    //Ng2APIModule.forRoot(environment.apiUrl, []),
+    MaterialModule.forRoot()
+
   ],
   providers: [],
   bootstrap: [AppComponent]
