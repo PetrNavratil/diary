@@ -1,9 +1,15 @@
 @import '../../theme';
 
+$margin-icon: 5px;
+
 .searcher-container {
+  display: flex;
+  align-items: center;
 
   .search-icon {
-
+    z-index: 2;
+    padding-left: $margin-icon;
+    color: $loader-background-color;
   }
 
   input {
@@ -18,6 +24,8 @@
     outline: 1px solid darken(#584C43, 2%);
     padding-left: 40px;
     padding-right: 45px;
+    margin-left: -24px - $margin-icon;
+    box-sizing: border-box;
 
     &:focus {
       outline: 3px solid #584C43;
@@ -31,16 +39,38 @@
     margin-left: -40px;
     padding-right: 40px;
   }
+
+  .dropdown {
+    background-color: white;
+    width: 600px;
+    overflow: hidden;
+    max-height: 50vh;
+    overflow-y: scroll;
+
+    .book {
+      box-sizing: border-box;
+      padding: 3px;
+      background-color: $loader-background-color;
+      min-height: 30px;
+      display: flex;
+      justify-content: space-between;
+
+      .summary {
+        display: flex;
+        flex-direction: column;
+      }
+
+      &:hover {
+        background-color: darken($loader-background-color, 5%);
+      }
+    }
+  }
 }
 
-.element, .el2 {
-  height: 100px;
+.hidden {
+  visibility: hidden !important;
 }
 
-.element {
-  background-color: red;
-}
-
-.el2 {
-  background-color: green;
+.none {
+  display: none !important;
 }

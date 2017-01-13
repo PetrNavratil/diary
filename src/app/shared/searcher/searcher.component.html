@@ -1,10 +1,17 @@
 <div class="searcher-container">
-  <i class="material-icons search-icon-tether">search</i>
+  <i class="material-icons search-icon">search</i>
   <input type="text" class="search-input" title="Search" placeholder="Search books" [ngModel]="key" (ngModelChange)="changed($event)">
-  <app-loader *ngIf="loading"></app-loader>
-  <button (click)="send()">CLICK</button>
-  {{key}}
-
-  <div class="dropdown">dropdown</div>
+  <app-loader [ngClass]="{'hidden': !loading}"></app-loader>
+  <div class="dropdown " [ngClass]="{'none': books.length === 0 }">
+    <div class="book" *ngFor="let book of books">
+      <div class="summary">
+        <div class="title">{{book.title}}</div>
+        <div class="author">{{book.author.name}}</div>
+      </div>
+      <img src="{{book.smallImageUrl}}" alt="{{book.author.name}} - {{book.title}}">
+    </div>
+  </div>
 </div>
+
+
 

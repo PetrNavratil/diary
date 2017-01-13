@@ -7,6 +7,9 @@ export function searchReducer(state: StoreModel<GRBook> = {data: []}, action: Ac
   switch (action.type) {
     case 'GET_SEARCH_SUCCESSFUL':
       let books: GRBook[] = [];
+      if (!action.payload) {
+        return state;
+      }
       if (action.payload instanceof Array) {
         books = action.payload.map(book => makeGRBook(book));
       } else {

@@ -17,6 +17,8 @@ export class SearcherComponent implements OnInit {
   key: string = '';
   loading: boolean = false;
   userInputChange: Subject<string> = new Subject<string>();
+  tether: Tether;
+  showDropdown: boolean = false;
 
 
   constructor(private store: Store<AppState>) {
@@ -31,6 +33,10 @@ export class SearcherComponent implements OnInit {
         } else {
           console.log('error has occured');
         }
+
+        if (this.books.length) {
+          this.tether.enable();
+        }
       }
     );
 
@@ -38,7 +44,10 @@ export class SearcherComponent implements OnInit {
       .debounceTime(500)
       .distinctUntilChanged()
       .subscribe(value => {
-        console.log(value);
+        if (value === '') {
+          this.loading = false;
+          return;
+        }
         this.store.dispatch({type: 'GET_SEARCH', payload: value});
         return value;
       })
@@ -46,19 +55,13 @@ export class SearcherComponent implements OnInit {
 
   ngOnInit() {
 
-    new Tether({
-      element: '.search-input',
-      target: '.dropdown',
-      attachment: 'bottom left',
-      targetAttachment: 'top left'
+    this.tether = new Tether({
+      element: '.dropdown',
+      target: '.search-input',
+      attachment: 'top left',
+      targetAttachment: 'bottom left',
+      enabled: false
     });
-
-    // new Tether({
-    //   element: '.search-input',
-    //   target: '.search-icon-tether',
-    //   attachment: 'middle left',
-    //   targetAttachment: 'middle left'
-    // })
   }
 
 
@@ -66,6 +69,10 @@ export class SearcherComponent implements OnInit {
     console.log('changed');
     this.loading = true;
     this.userInputChange.next(value);
+  }
+
+  hideDropdown() {
+    console.log('focus out');
   }
 
 
