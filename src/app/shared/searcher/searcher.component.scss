@@ -1,0 +1,46 @@
+@import '../../theme';
+
+.searcher-container {
+
+  .search-icon {
+
+  }
+
+  input {
+    border: none;
+    background: transparent;
+    height: 40px;
+    width: 300px;
+    transition: width 1s, color 1s, outline 1s, ease;
+    color: $toolbar-font-color;
+    font-size: $toolbar-font-size;
+    font-weight: $toolbar-weight;
+    outline: 1px solid darken(#584C43, 2%);
+    padding-left: 40px;
+    padding-right: 45px;
+
+    &:focus {
+      outline: 3px solid #584C43;
+      width: 600px;
+      color: lighten($toolbar-font-color, 5%);
+
+    }
+  }
+
+  app-loader {
+    margin-left: -40px;
+    padding-right: 40px;
+  }
+}
+
+.element, .el2 {
+  height: 100px;
+}
+
+.element {
+  background-color: red;
+}
+
+.el2 {
+  background-color: green;
+}

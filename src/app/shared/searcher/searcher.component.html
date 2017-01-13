@@ -1,0 +1,10 @@
+<div class="searcher-container">
+  <i class="material-icons search-icon-tether">search</i>
+  <input type="text" class="search-input" title="Search" placeholder="Search books" [ngModel]="key" (ngModelChange)="changed($event)">
+  <app-loader *ngIf="loading"></app-loader>
+  <button (click)="send()">CLICK</button>
+  {{key}}
+
+  <div class="dropdown">dropdown</div>
+</div>
+

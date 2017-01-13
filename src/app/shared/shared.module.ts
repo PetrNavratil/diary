@@ -5,6 +5,8 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { SearcherComponent } from './searcher/searcher.component';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   imports: [
@@ -16,6 +18,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
   ],
   declarations: [
     ToolbarComponent,
+    SearcherComponent,
+    LoaderComponent,
   ],
   exports: [
     BrowserModule,
@@ -23,7 +27,9 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     HttpModule,
     RouterModule,
 
-    ToolbarComponent
+    ToolbarComponent,
+    SearcherComponent,
+    LoaderComponent
   ]
 })
 export class SharedModule {

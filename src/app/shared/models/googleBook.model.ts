@@ -11,8 +11,15 @@ interface BookInfo {
   pageCount: number,
   previewLink: string,
   publishDate: string,
-  title: string
+  title: string,
+  imageLinks: Thumbnail
 }
+
+interface Thumbnail {
+  smallThumbnail: string,
+  thumbnail: string
+}
+
 
 interface Author {
   name: string
@@ -40,6 +47,7 @@ function mapBook(input: any): BookInfo {
     pageCount: input.pageCount,
     previewLink: input.previewLink,
     publishDate: input.publishDate,
-    title: input.title
+    title: input.title,
+    imageLinks: input.imageLinks ? input.imageLinks : undefined
   }
 }

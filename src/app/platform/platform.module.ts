@@ -12,7 +12,7 @@ import { SearchComponent } from './search/search.component';
     SharedModule
   ],
   providers: [
-    GoogleResource
+    GoogleResource,
   ],
   declarations: [
     PlatformComponent,
