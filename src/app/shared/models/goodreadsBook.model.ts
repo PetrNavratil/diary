@@ -1,7 +1,7 @@
-export interface GRBook {
-  id: number,
+export interface GRSearchBook {
+  id: string,
   title: string,
-  author: GRAuthor,
+  author: GRSearchAuthor,
   imageUrl: string,
   smallImageUrl: string
   originalPublicationYear: string,
@@ -10,33 +10,71 @@ export interface GRBook {
   averageRating: string,
 }
 
-interface GRAuthor {
-  id: number,
+interface GRSearchAuthor {
+  id: string,
   name: string
 }
 
-
-export function makeGRBook(input: any): GRBook {
-  return {
-    id: input.best_book.id['#content'],
-    title: input.best_book.title,
-    author: makeGRAuthor(input.best_book.author),
-    imageUrl: input.best_book.image_url,
-    smallImageUrl: input.best_book.small_image_url,
-    originalPublicationYear: getDate(input.original_publication_year),
-    originalPublicationMonth: getDate(input.original_publication_month),
-    originalPublicationDay: getDate(input.original_publication_day),
-    averageRating: input.average_rating
-  }
+export interface GRBook {
+  id: string;
+  title: string;
+  isbn: string;
+  isbn13: string;
+  asin: string;
+  countryCode: string;
+  imageUrl: string;
+  smallImageUrl: string;
+  publicationYear: string;
+  publicationMonth: string;
+  publicationDay: string;
+  publisher: string;
+  languageCode: string;
+  isEbook: string;
+  description: string;
+  averageRating: string;
+  pages: string;
+  originUrl: string;
+  authors: GRAuthor[];
+  series: GRSerie;
+  similarBooks: GRSimilarBook[];
 }
 
-function getDate(input: any) {
-  return input['#content'] ? input['#content'] : '';
+export interface GRAuthor {
+  id: string;
+  name: string;
+  role: string;
+  imageUrl: string;
+  smallImageUrl: string;
+  originUrl: string;
 }
 
-function makeGRAuthor(input: any): GRAuthor {
-  return {
-    id: input.id['#content'],
-    name: input.name
-  }
+export interface GRSerie {
+  id: string;
+  title: string;
+  count: string;
 }
+
+export interface GRSimilarBook {
+  id: string;
+  title: string;
+  imageUrl: string;
+  smallImageUrl: string;
+  publicationYear: string;
+  publicationMonth: string;
+  publicationDay: string;
+  pages: string;
+  originUrl: string;
+  authors: GRSimilarBookAuthor[];
+}
+
+export interface GRSimilarBookAuthor {
+  id: string;
+  name: string;
+  originUrl: string;
+}
+
+
+
+
+
+

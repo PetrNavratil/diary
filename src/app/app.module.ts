@@ -14,6 +14,8 @@ import { Ng2APIModule } from '@flowup/ng2-api';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { SearchEffect } from './shared/searcher/search.effect';
+import { BookDetail } from './platform/book-detail/book-detail.effect';
+import { detailReducer } from './platform/book-detail/book-detail.reducer';
 
 @NgModule({
   declarations: [
@@ -30,9 +32,11 @@ import { SearchEffect } from './shared/searcher/search.effect';
     AppRoutes,
 
     StoreModule.provideStore({
-      search: searchReducer
+      search: searchReducer,
+      detail: detailReducer
     }),
     EffectsModule.runAfterBootstrap(SearchEffect),
+    EffectsModule.runAfterBootstrap(BookDetail),
     StoreDevtoolsModule.instrumentOnlyWithExtension()
 
 

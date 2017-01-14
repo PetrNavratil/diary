@@ -17,6 +17,6 @@ export class SearchEffect {
   @Effect() search: Observable<Action> = this.actions
     .ofType('GET_SEARCH')
     .switchMap((action) => this.http.get(environment.apiUrl + API_ENDPOINT + encodeURI(action.payload))
-      .map(response => ({type: 'GET_SEARCH_SUCCESSFUL', payload: response.json().GoodreadsResponse.search.results.work}))
+      .map(response => ({type: 'GET_SEARCH_SUCCESSFUL', payload: response.json()}))
       .catch(err => Observable.of({type: 'GET_SEARCH_FAILURE', payload: err})));
 }

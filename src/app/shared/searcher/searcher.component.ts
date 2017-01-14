@@ -1,5 +1,5 @@
-import { Component, OnInit, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
-import { GRBook } from '../models/goodreadsBook.model';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { GRSearchBook } from '../models/goodreadsBook.model';
 import { AppState, StoreModel } from '../models/store-model';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class SearcherComponent implements OnInit {
 
-  books: GRBook[] = [];
+  books: GRSearchBook[] = [];
   key: string = '';
   loading: boolean = false;
   userInputChange: Subject<string> = new Subject<string>();
@@ -28,7 +28,7 @@ export class SearcherComponent implements OnInit {
   constructor(private store: Store<AppState>, private elRef: ElementRef, private router: Router) {
     this.store.select('search').subscribe(
       (data) => {
-        let tmp = <StoreModel<GRBook>>data;
+        let tmp = <StoreModel<GRSearchBook>>data;
         if (!tmp.error) {
           console.log('data arrived');
           this.books = tmp.data;
@@ -87,8 +87,9 @@ export class SearcherComponent implements OnInit {
     }
   }
 
-  selected(book: GRBook) {
+  selected(book: GRSearchBook) {
     this.showDropdown = false;
+    this.store.dispatch({type: 'GET_DETAIL', payload: book.id});
     this.router.navigate(['platform/detail']);
   }
 
