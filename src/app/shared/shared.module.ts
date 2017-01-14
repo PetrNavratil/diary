@@ -7,6 +7,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { SearcherComponent } from './searcher/searcher.component';
 import { LoaderComponent } from './loader/loader.component';
+import { SideNavComponent } from './side-nav/side-nav.component';
+import { CardComponent } from './card/card.component';
 
 @NgModule({
   imports: [
@@ -20,6 +22,8 @@ import { LoaderComponent } from './loader/loader.component';
     ToolbarComponent,
     SearcherComponent,
     LoaderComponent,
+    SideNavComponent,
+    CardComponent,
   ],
   exports: [
     BrowserModule,
@@ -29,7 +33,9 @@ import { LoaderComponent } from './loader/loader.component';
 
     ToolbarComponent,
     SearcherComponent,
-    LoaderComponent
+    LoaderComponent,
+    SideNavComponent,
+    CardComponent
   ]
 })
 export class SharedModule {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { GRSearchBook } from '../models/goodreadsBook.model';
 import { AppState, StoreModel } from '../models/store-model';
 import { Store } from '@ngrx/store';
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './searcher.component.html',
   styleUrls: ['./searcher.component.scss']
 })
-export class SearcherComponent implements OnInit {
+export class SearcherComponent implements OnInit, OnDestroy {
 
   books: GRSearchBook[] = [];
   key: string = '';
@@ -21,12 +21,13 @@ export class SearcherComponent implements OnInit {
   tether: Tether;
 
   showDropdown: boolean = false;
+  subscription: any;
 
   @ViewChild('dropdown') dropdown: ElementRef;
 
 
   constructor(private store: Store<AppState>, private elRef: ElementRef, private router: Router) {
-    this.store.select('search').subscribe(
+    this.subscription = this.store.select('search').subscribe(
       (data) => {
         let tmp = <StoreModel<GRSearchBook>>data;
         if (!tmp.error) {
@@ -63,6 +64,11 @@ export class SearcherComponent implements OnInit {
       }
     });
 
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    this.tether.destroy();
   }
 
   ngOnInit() {
