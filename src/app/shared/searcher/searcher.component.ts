@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { GRBook } from '../models/goodreadsBook.model';
 import { AppState, StoreModel } from '../models/store-model';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import * as Tether from 'tether';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -18,10 +19,13 @@ export class SearcherComponent implements OnInit {
   loading: boolean = false;
   userInputChange: Subject<string> = new Subject<string>();
   tether: Tether;
+
   showDropdown: boolean = false;
 
+  @ViewChild('dropdown') dropdown: ElementRef;
 
-  constructor(private store: Store<AppState>) {
+
+  constructor(private store: Store<AppState>, private elRef: ElementRef, private router: Router) {
     this.store.select('search').subscribe(
       (data) => {
         let tmp = <StoreModel<GRBook>>data;
@@ -35,6 +39,7 @@ export class SearcherComponent implements OnInit {
         }
 
         if (this.books.length) {
+          this.showDropdown = true;
           this.tether.enable();
         }
       }
@@ -50,11 +55,17 @@ export class SearcherComponent implements OnInit {
         }
         this.store.dispatch({type: 'GET_SEARCH', payload: value});
         return value;
-      })
+      });
+
+    document.body.addEventListener('click', (event) => {
+      if (!this.elRef.nativeElement.contains(event.target)) {
+        this.showDropdown = false;
+      }
+    });
+
   }
 
   ngOnInit() {
-
     this.tether = new Tether({
       element: '.dropdown',
       target: '.search-input',
@@ -66,13 +77,19 @@ export class SearcherComponent implements OnInit {
 
 
   changed(value: string) {
-    console.log('changed');
     this.loading = true;
     this.userInputChange.next(value);
   }
 
-  hideDropdown() {
-    console.log('focus out');
+  displayDropdown() {
+    if (this.books.length) {
+      this.showDropdown = true;
+    }
+  }
+
+  selected(book: GRBook) {
+    this.showDropdown = false;
+    this.router.navigate(['platform/detail']);
   }
 
 
