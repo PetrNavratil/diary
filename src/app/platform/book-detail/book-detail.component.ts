@@ -20,11 +20,9 @@ export class BookDetailComponent implements OnInit {
           return;
         }
         this.book = tmpData.data[0];
-        console.log('book', this.book);
         let div = document.createElement("div");
         div.innerHTML = this.book.description;
         this.book.description = div.textContent || div.innerText || '';
-        console.log('data', this.book);
       }
     );
 

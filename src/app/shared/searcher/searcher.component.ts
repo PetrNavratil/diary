@@ -18,7 +18,7 @@ export class SearcherComponent implements OnInit, OnDestroy {
   key: string = '';
   loading: boolean = false;
   userInputChange: Subject<string> = new Subject<string>();
-  tether: Tether;
+  tether: Tether = null;
 
   showDropdown: boolean = false;
   subscription: any;
@@ -67,11 +67,14 @@ export class SearcherComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log('is this happening');
     this.subscription.unsubscribe();
     this.tether.destroy();
+    this.store.dispatch({type: 'SEARCH_DESTROY'});
   }
 
   ngOnInit() {
+    console.log('on init');
     this.tether = new Tether({
       element: '.dropdown',
       target: '.search-input',
