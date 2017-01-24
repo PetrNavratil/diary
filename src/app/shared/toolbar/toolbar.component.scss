@@ -7,11 +7,12 @@ $avatar-size: 40px;
   justify-content: space-between;
   align-items: center;
 
-  height: 40px;
+  height: $toolbar-height;
   padding: 10px 0 10px 10px;
   color: $toolbar-font-color;
   font-size: $toolbar-font-size;
   font-weight: $toolbar-weight;
+  box-sizing: border-box;
 
   background-image: $toolbar-background-color;
 

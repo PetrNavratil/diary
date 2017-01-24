@@ -22,6 +22,9 @@
       background-color: darken($side-nav-color, 5%);
       cursor: pointer;
     }
+    &:first-child {
+      margin-top: $toolbar-height;
+    }
   }
 
   .selected {
