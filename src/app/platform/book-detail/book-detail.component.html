@@ -1,25 +1,75 @@
-<div class="detail-container" *ngIf="book">
-  <div class="book-info">
-    <div class="first-column">
-      <div class="cover">
-        <img src="{{book.imageUrl}}" alt="{{book.title}}">
+<app-card *ngIf="book">
+  <div class="book-detail-container">
+    <div class="actions-row">
+      <div class="source-name">
+        GOODREADS
       </div>
-      <div class="info">
-        <div class="title">
-          <div class="header">title</div>
-          <div class="content">{{book.title}}</div>
-        </div>
-        <div class="author" *ngFor="let author of book.authors">
-          <div class="header">author</div>
-          <div class="content">{{author.name}}</div>
-        </div>
+      <div class="actions">
+        <app-card>Add to the shelf</app-card>
+        <app-card>Status: Read / To read</app-card>
+        <app-card>Export to PDF</app-card>
       </div>
     </div>
-    <div class="second-column">
-      <div class="description">
-        <div class="header">description</div>
-        <div class="content">{{book.description}}</div>
+
+    <div class="book-info">
+      <div class="source">
+        <app-card>
+          SOURCE
+        </app-card>
       </div>
+
+      <div class="info">
+        <app-card>
+          <div class="info-container">
+            <div class="cover">
+              <img src="{{book.imageUrl}}" alt="{{book.authors[0].name}} - {{book.title}}">
+            </div>
+
+            <div class="details">
+              <div class="label">title</div>
+              <div class="content">{{book.title}}</div>
+              <div class="label">author</div>
+              <div class="content">{{book.authors[0].name}}</div>
+              <div class="label">publisher</div>
+              <div class="content">{{book.publisher}}</div>
+              <div class="label">pages</div>
+              <div class="content">{{book.pages}}</div>
+            </div>
+
+            <div class="description">
+              {{book.description}}
+            </div>
+          </div>
+        </app-card>
+      </div>
+    </div>
+
+    <div class="buy">
+      <app-card>
+        BUY
+      </app-card>
+    </div>
+
+    <div class="comments">
+      <app-card>
+        <div class="my-comment">
+          MY COMMENT
+        </div>
+        <div class="other-comments">
+          <div>comment</div>
+          <div>comment</div>
+          <div>comment</div>
+          <div>comment</div>
+        </div>
+      </app-card>
+    </div>
+
+    <div class="education">
+      <app-card>
+        <div class="education-content">
+          EDUCATION SECTION
+        </div>
+      </app-card>
     </div>
   </div>
-</div>
+</app-card>
