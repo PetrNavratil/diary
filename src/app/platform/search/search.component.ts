@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GoogleResource } from '../../shared/resources/googleBooks';
 import { createBook } from '../../shared/models/googleBook.model';
 
@@ -7,9 +7,13 @@ import { createBook } from '../../shared/models/googleBook.model';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
 
   constructor(private googleBooks: GoogleResource) {
+  }
+
+  ngOnDestroy() {
+    console.log('search being destryoed');
   }
 
   ngOnInit() {

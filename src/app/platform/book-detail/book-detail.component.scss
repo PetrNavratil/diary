@@ -1,11 +1,17 @@
-$book-source-width: 250px;
-$space-between: 30px;
+@import '../../theme';
+
+$tabs-color: $loader-background-color;
+$book-source-width: 200px;
+$space-between: 15px;
 
 $label-color: black;
 $label-size: 16px;
 
 $content-color: rgba(black, .87);
 $content-size: 15px;
+
+$tabs-item-height: 40px;
+$arrow-size: 40px;
 
 .book-detail-container {
   display: flex;
@@ -36,7 +42,44 @@ $content-size: 15px;
     display: flex;
 
     .source {
-      width: $book-source-width;
+
+      .triangle {
+        width: 0;
+        height: 0;
+        border-left: $arrow-size solid $tabs-color;
+        border-top: $arrow-size/2 solid transparent;
+        border-bottom: $arrow-size/2 solid transparent;
+      }
+
+      .tabs-container {
+        display: flex;
+        flex-direction: column;
+        min-width: $book-source-width;
+
+        .item {
+          display: flex;
+          height: $tabs-item-height;
+          padding: 10px 0;
+          box-sizing: border-box;
+          align-items: center;
+          justify-content: center;
+
+          &:not(:last-child) {
+            border-bottom: 1px solid rgba(black, .2);
+          }
+
+          &:hover {
+            cursor: pointer;
+            background-color: darken(white, 3%);
+          }
+        }
+      }
+      .selected-tab {
+        background-color: $tabs-color;
+        &:hover {
+          background: linear-gradient(to right, darken($tabs-color, 10%), $tabs-color) !important;
+        }
+      }
     }
 
     .info {
@@ -78,10 +121,10 @@ $content-size: 15px;
         }
 
         .description {
-          margin-left: 40px;
+          margin-left: 30px;
           margin-right: 20px;
           text-align: justify;
-          flex-grow: 3;
+          flex-grow: 4;
           flex-basis: 0;
         }
 
@@ -94,6 +137,8 @@ $content-size: 15px;
   }
 
   .comments {
+
+    display: flex;
 
     .my-comment {
       display: flex;

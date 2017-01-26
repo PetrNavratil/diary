@@ -9,6 +9,7 @@ import { SearcherComponent } from './searcher/searcher.component';
 import { LoaderComponent } from './loader/loader.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { CardComponent } from './card/card.component';
+import { NoPaddingCard } from './card/no-padding-card.directive';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { CardComponent } from './card/card.component';
     LoaderComponent,
     SideNavComponent,
     CardComponent,
+    NoPaddingCard
   ],
   exports: [
     BrowserModule,
@@ -35,7 +37,8 @@ import { CardComponent } from './card/card.component';
     SearcherComponent,
     LoaderComponent,
     SideNavComponent,
-    CardComponent
+    CardComponent,
+    NoPaddingCard
   ]
 })
 export class SharedModule {

@@ -1,4 +1,4 @@
-<app-card *ngIf="book">
+<app-card>
   <div class="book-detail-container">
     <div class="actions-row">
       <div class="source-name">
@@ -13,12 +13,18 @@
 
     <div class="book-info">
       <div class="source">
-        <app-card>
-          SOURCE
+        <div class="triangle"></div>
+        <app-card noPaddingCard>
+          <div class="tabs-container">
+            <div class="item" *ngFor="let tab of tabs; let i = index" [ngClass]="{'selected-tab': selectedTab === i}"
+                 (click)="selectTab(i)">
+              {{tab}}
+            </div>
+          </div>
         </app-card>
       </div>
 
-      <div class="info">
+      <div class="info" *ngIf="book">
         <app-card>
           <div class="info-container">
             <div class="cover">
@@ -50,8 +56,8 @@
       </app-card>
     </div>
 
-    <div class="comments">
-      <app-card>
+    <app-card>
+      <div class="comments">
         <div class="my-comment">
           MY COMMENT
         </div>
@@ -61,8 +67,8 @@
           <div>comment</div>
           <div>comment</div>
         </div>
-      </app-card>
-    </div>
+      </div>
+    </app-card>
 
     <div class="education">
       <app-card>

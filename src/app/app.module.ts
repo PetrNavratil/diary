@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule, Http } from '@angular/http';
+import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { LandingModule } from './landing/landing.module';
@@ -28,7 +28,7 @@ import { detailReducer } from './platform/book-detail/book-detail.reducer';
     LandingModule,
     PlatformModule,
     //Ng2APIModule.forRoot(environment.apiUrl, []),
-    //MaterialModule.forRoot(),
+    MaterialModule,
     AppRoutes,
 
     StoreModule.provideStore({
@@ -40,10 +40,10 @@ import { detailReducer } from './platform/book-detail/book-detail.reducer';
     StoreDevtoolsModule.instrumentOnlyWithExtension()
 
 
-
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
 
