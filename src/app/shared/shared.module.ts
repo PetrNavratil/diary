@@ -10,6 +10,8 @@ import { LoaderComponent } from './loader/loader.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { CardComponent } from './card/card.component';
 import { NoPaddingCard } from './card/no-padding-card.directive';
+import { MaterialModule } from '@angular/material';
+import { EqualValidator } from './directives/formFieldEqual';
 
 @NgModule({
   imports: [
@@ -18,6 +20,7 @@ import { NoPaddingCard } from './card/no-padding-card.directive';
     FormsModule,
     HttpModule,
     RouterModule,
+    MaterialModule
   ],
   declarations: [
     ToolbarComponent,
@@ -25,20 +28,23 @@ import { NoPaddingCard } from './card/no-padding-card.directive';
     LoaderComponent,
     SideNavComponent,
     CardComponent,
-    NoPaddingCard
+    NoPaddingCard,
+    EqualValidator
   ],
   exports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     RouterModule,
+    MaterialModule,
 
     ToolbarComponent,
     SearcherComponent,
     LoaderComponent,
     SideNavComponent,
     CardComponent,
-    NoPaddingCard
+    NoPaddingCard,
+    EqualValidator
   ]
 })
 export class SharedModule {
