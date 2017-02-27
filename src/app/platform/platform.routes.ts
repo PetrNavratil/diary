@@ -8,6 +8,7 @@ export const platformRoutes: Routes = [{
   children: [
     {path: '', component: DashboardComponent},
     {path: 'search', component: SearchComponent},
+    {path: 'detail/:id', component: BookDetailComponent},
     {path: 'detail', component: BookDetailComponent}
   ]
 }];

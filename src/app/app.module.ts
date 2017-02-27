@@ -8,14 +8,14 @@ import { LandingModule } from './landing/landing.module';
 import { AppRoutes } from './app.routes';
 import { PlatformModule } from './platform/platform.module';
 import { StoreModule } from '@ngrx/store';
-import { searchReducer } from './shared/searcher/search.reducer';
 import { Ng2APIModule } from '@flowup/ng2-api';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-import { SearchEffect } from './shared/searcher/search.effect';
-import { BookDetail } from './platform/book-detail/book-detail.effect';
-import { detailReducer } from './platform/book-detail/book-detail.reducer';
 import 'hammerjs';
+import { searchReducer } from './reducers/search.reducer';
+import { SearchEffect } from './effects/search.effect';
+import { detailReducer } from './reducers/book-detail.reducer';
+import { BookDetail } from './effects/book-detail.effect';
 
 
 @NgModule({

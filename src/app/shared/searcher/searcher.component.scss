@@ -46,6 +46,7 @@ $margin-icon: 5px;
     overflow: hidden;
     max-height: 50vh;
     overflow-y: auto;
+    z-index: 99;
 
     .book {
       box-sizing: border-box;

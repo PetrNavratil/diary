@@ -1,10 +1,12 @@
-import { Component, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnDestroy, AfterViewChecked } from '@angular/core';
 import { GRSearchBook } from '../models/goodreadsBook.model';
-import { AppState, StoreModel } from '../models/store-model';
+import { AppState } from '../models/store-model';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import * as Tether from 'tether';
 import { Router } from '@angular/router';
+import { ComponentDispatcher, squirrel, SquirrelData } from '@flowup/squirrel';
+import { searchActions } from '../../reducers/search.reducer';
 
 
 @Component({
@@ -12,7 +14,7 @@ import { Router } from '@angular/router';
   templateUrl: './searcher.component.html',
   styleUrls: ['./searcher.component.scss']
 })
-export class SearcherComponent implements OnInit, OnDestroy {
+export class SearcherComponent implements OnDestroy, AfterViewChecked {
 
   books: GRSearchBook[] = [];
   key: string = '';
@@ -21,29 +23,35 @@ export class SearcherComponent implements OnInit, OnDestroy {
   tether: Tether = null;
 
   showDropdown: boolean = false;
-  subscription: any;
+  dispatcher: ComponentDispatcher;
+  subscriptions: any[] = [];
 
   @ViewChild('dropdown') dropdown: ElementRef;
 
 
   constructor(private store: Store<AppState>, private elRef: ElementRef, private router: Router) {
-    this.subscription = this.store.select('search').subscribe(
-      (data) => {
-        let tmp = <StoreModel<GRSearchBook>>data;
-        if (!tmp.error) {
-          console.log('data arrived');
-          this.books = tmp.data;
-          console.log('books are', this.books);
-          this.loading = false;
-        } else {
-          console.log('error has occured');
-        }
+    this.dispatcher = new ComponentDispatcher(store, this);
+    let {dataStream, errorStream} = squirrel(store, 'search', this);
+    this.subscriptions.push(
+      dataStream.subscribe(
+        (data: SquirrelData<GRSearchBook>) => {
+          this.books = data.data;
+          this.loading = data.loading;
 
-        if (this.books.length) {
-          this.showDropdown = true;
-          this.tether.enable();
+          if (this.books.length && this.tether) {
+            this.tether.enable();
+            this.showDropdown = true;
+          }
         }
-      }
+      )
+    );
+    this.subscriptions.push(
+      errorStream.subscribe(
+        (error: Error) => {
+          console.error(error);
+          this.loading = false;
+        }
+      )
     );
 
     this.userInputChange
@@ -54,7 +62,7 @@ export class SearcherComponent implements OnInit, OnDestroy {
           this.loading = false;
           return;
         }
-        this.store.dispatch({type: 'GET_SEARCH', payload: value});
+        this.dispatcher.dispatch(searchActions.API_GET, value);
         return value;
       });
 
@@ -67,14 +75,14 @@ export class SearcherComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('is this happening');
-    this.subscription.unsubscribe();
+    for (let subscription of this.subscriptions) {
+      subscription.unsubscribe();
+    }
     this.tether.destroy();
-    this.store.dispatch({type: 'SEARCH_DESTROY'});
+    this.dispatcher.dispatch((<any>searchActions.ADDITIONAL).DESTROY);
   }
 
-  ngOnInit() {
-    console.log('on init');
+  ngAfterViewChecked() {
     this.tether = new Tether({
       element: '.dropdown',
       target: '.search-input',
@@ -83,7 +91,6 @@ export class SearcherComponent implements OnInit, OnDestroy {
       enabled: false
     });
   }
-
 
   changed(value: string) {
     this.loading = true;
@@ -98,8 +105,7 @@ export class SearcherComponent implements OnInit, OnDestroy {
 
   selected(book: GRSearchBook) {
     this.showDropdown = false;
-    this.store.dispatch({type: 'GET_DETAIL', payload: book.id});
-    this.router.navigate(['platform/detail']);
+    this.router.navigate([`platform/detail/${book.id}`]);
   }
 
 
