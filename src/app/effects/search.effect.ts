@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { searchActions } from '../reducers/search.reducer';
 import { environment } from '../../environments/environment';
+import { createOptions } from '../shared/createOptions';
 
 const API_ENDPOINT = '/books?key=';
 
@@ -17,7 +18,7 @@ export class SearchEffect {
 
   @Effect() search: Observable<Action> = this.actions
     .ofType(searchActions.API_GET)
-    .switchMap((action) => this.http.get(environment.apiUrl + API_ENDPOINT + encodeURI(action.payload.body))
+    .switchMap((action) => this.http.get(environment.apiUrl + API_ENDPOINT + encodeURI(action.payload.body), createOptions())
       .map(body => ({type: searchActions.GET, payload: {origin: action.payload.origin, body: body.json()}}))
       .catch(body => Observable.of({type: searchActions.API_GET_FAIL, payload: {origin: action.payload.origin, body}})));
 }

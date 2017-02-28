@@ -1,11 +1,11 @@
 <div class="landing-container">
   <app-card>
-    <div class="action">
+    <div class="action" *ngIf="show === 'login'" autocomplete="new-password">
       <form novalidate #f="ngForm" (ngSubmit)="login(f)">
         <md-input-container [dividerColor]="userName.invalid && userName.touched ? 'warn' : 'primary'">
           <input mdInput placeholder="Username"
                  type="text"
-                 name="name"
+                 name="userName"
                  ngModel
                  required
                  #userName="ngModel"
@@ -22,16 +22,18 @@
                  required
                  minlength="6"
                  #userPassword="ngModel"
+                 autocomplete="new-password"
           >
           <md-hint *ngIf="userPassword.invalid && userPassword.touched" class="alert" align="start">
             Password has to be at least 6 characters long
           </md-hint>
         </md-input-container>
+        <span class="error" [ngClass]="{'visible': errorMessage.length}">{{errorMessage}}</span>
         <button type="submit" md-raised-button color="primary" [disabled]="f.invalid">Login</button>
       </form>
     </div>
 
-    <div class="action">
+    <div class="action" *ngIf="show === 'register'" autocomplete="new-password">
       <form novalidate #reg="ngForm" (ngSubmit)="register(reg)">
         <md-input-container [dividerColor]="regUserName.invalid && regUserName.touched ? 'warn' : 'primary'">
           <input mdInput placeholder="Username"
@@ -67,6 +69,7 @@
                  minlength="6"
                  #regUserPass="ngModel"
                  validateEqual="confirmPassword" reverse="true"
+                 autocomplete="new-password"
           >
           <md-hint *ngIf="regUserPass.invalid && regUserPass.touched" class="alert" align="start">
             Password has to be at least 6 characters long
@@ -81,11 +84,13 @@
                  minlength="6"
                  #regUserConfirm="ngModel"
                  validateEqual="password"
+                 autocomplete="new-password"
           >
           <md-hint *ngIf="regUserConfirm.invalid && regUserConfirm.touched" class="alert" align="start">
             Confirm password has to be same as password above
           </md-hint>
         </md-input-container>
+        <span class="error" [ngClass]="{'visible': errorMessage.length}">{{errorMessage}}</span>
         <button type="submit" md-raised-button color="primary" [disabled]="reg.invalid">Register</button>
       </form>
     </div>

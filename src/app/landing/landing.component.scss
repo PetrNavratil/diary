@@ -1,4 +1,5 @@
 $login-width: 650px;
+$error-color: #f44336;
 
 .landing-container {
   display: flex;
@@ -25,9 +26,21 @@ $login-width: 650px;
           }
 
           .alert {
-            color: #f44336;
+            color: $error-color;
           }
 
+        }
+
+        .error {
+          color: $error-color;
+          margin-bottom: 5px;
+          font-family: Roboto, "Helvetica Neue", sans-serif;
+          font-size: 14px;
+          text-align: center;
+          visibility: hidden;
+          &.visible {
+            visibility: visible;
+          }
         }
 
         button {

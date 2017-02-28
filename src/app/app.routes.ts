@@ -8,7 +8,7 @@ export const routes: Routes = [{
   path: '',
   children: [
     {path: 'platform', component: PlatformComponent, children: [...platformRoutes]},
-    {path: '', component: LandingComponent}
+    {path: 'landing/:action', component: LandingComponent},
   ]
 }];
 
