@@ -7,7 +7,7 @@ import { searchActions } from '../reducers/search.reducer';
 import { environment } from '../../environments/environment';
 import { createOptions } from '../shared/createOptions';
 
-const API_ENDPOINT = '/books?key=';
+const API_ENDPOINT = '/search?key=';
 
 
 @Injectable()

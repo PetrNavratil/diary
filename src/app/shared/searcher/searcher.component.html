@@ -7,9 +7,9 @@
     <div class="book" *ngFor="let book of books" (click)="selected(book)">
       <div class="summary">
         <div class="title">{{book.title}}</div>
-        <div class="author">{{book.author.name}}</div>
+        <div class="author">{{book.author}}</div>
       </div>
-      <img src="{{book.smallImageUrl}}" alt="{{book.author.name}} - {{book.title}}">
+      <img src="{{book.imageUrl}}" alt="{{book.author}} - {{book.title}}">
     </div>
   </div>
 </div>

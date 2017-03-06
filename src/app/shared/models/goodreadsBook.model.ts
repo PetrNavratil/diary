@@ -1,13 +1,8 @@
 export interface GRSearchBook {
   id: string,
   title: string,
-  author: GRSearchAuthor,
+  author: string,
   imageUrl: string,
-  smallImageUrl: string
-  originalPublicationYear: string,
-  originalPublicationMonth: string,
-  originalPublicationDay: string,
-  averageRating: string,
 }
 
 interface GRSearchAuthor {

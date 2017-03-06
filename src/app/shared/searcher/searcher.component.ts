@@ -7,6 +7,9 @@ import * as Tether from 'tether';
 import { Router } from '@angular/router';
 import { ComponentDispatcher, squirrel, SquirrelData } from '@flowup/squirrel';
 import { searchActions } from '../../reducers/search.reducer';
+import { Http } from '@angular/http';
+import { environment } from '../../../environments/environment';
+import { createOptions } from '../createOptions';
 
 
 @Component({
@@ -29,7 +32,7 @@ export class SearcherComponent implements OnDestroy, AfterViewChecked {
   @ViewChild('dropdown') dropdown: ElementRef;
 
 
-  constructor(private store: Store<AppState>, private elRef: ElementRef, private router: Router) {
+  constructor(private store: Store<AppState>, private elRef: ElementRef, private router: Router, private http: Http) {
     this.dispatcher = new ComponentDispatcher(store, this);
     let {dataStream, errorStream} = squirrel(store, 'search', this);
     this.subscriptions.push(
@@ -105,7 +108,12 @@ export class SearcherComponent implements OnDestroy, AfterViewChecked {
 
   selected(book: GRSearchBook) {
     this.showDropdown = false;
-    this.router.navigate([`platform/detail/${book.id}`]);
+    this.http.post(`${environment.apiUrl}/book`, book, createOptions()).subscribe(
+      data => {
+        this.router.navigate([`platform/detail/${data.json().id}`]);
+      }
+    );
+
   }
 
 
