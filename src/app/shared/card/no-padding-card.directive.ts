@@ -7,7 +7,6 @@ export class NoPaddingCard implements OnInit {
 
   ngOnInit() {
     let tmp = this.el.nativeElement.getElementsByClassName('card-container')[0];
-    console.log('tmp', tmp);
     tmp.style.padding = '0';
   }
 }

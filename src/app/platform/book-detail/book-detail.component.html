@@ -5,7 +5,8 @@
         GOODREADS
       </div>
       <div class="actions">
-        <app-card>Add to the shelf</app-card>
+        <app-loading-button [icon]="'add'" [color]="'primary'" [title]="'Add'" [loading]="insertLoading" class="button" *ngIf="shouldAdd" (click)="addBook()"></app-loading-button>
+        <app-loading-button [icon]="'delete'" [color]="'warn'" class="button" [loading]="insertLoading" [title]="'Remove'" *ngIf="!shouldAdd" (click)="removeBook()"></app-loading-button>
         <app-card>Status: Read / To read</app-card>
         <app-card>Export to PDF</app-card>
       </div>

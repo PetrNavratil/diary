@@ -6,6 +6,8 @@ import { SharedModule } from '../shared/shared.module';
 import { GoogleResource } from '../shared/resources/googleBooks';
 import { SearchComponent } from './search/search.component';
 import { BookDetailComponent } from './book-detail/book-detail.component';
+import { MyBooksComponent } from './my-books/my-books.component';
+import { BookPreviewComponent } from './book-preview/book-preview.component';
 
 @NgModule({
   imports: [
@@ -20,6 +22,8 @@ import { BookDetailComponent } from './book-detail/book-detail.component';
     DashboardComponent,
     SearchComponent,
     BookDetailComponent,
+    MyBooksComponent,
+    BookPreviewComponent,
   ],
   exports: []
 })

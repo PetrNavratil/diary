@@ -12,6 +12,7 @@ import { CardComponent } from './card/card.component';
 import { NoPaddingCard } from './card/no-padding-card.directive';
 import { MaterialModule } from '@angular/material';
 import { EqualValidator } from './directives/formFieldEqual';
+import { LoadingButtonComponent } from './loading-button/loading-button.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { EqualValidator } from './directives/formFieldEqual';
     SideNavComponent,
     CardComponent,
     NoPaddingCard,
-    EqualValidator
+    EqualValidator,
+    LoadingButtonComponent
   ],
   exports: [
     BrowserModule,
@@ -44,7 +46,8 @@ import { EqualValidator } from './directives/formFieldEqual';
     SideNavComponent,
     CardComponent,
     NoPaddingCard,
-    EqualValidator
+    EqualValidator,
+    LoadingButtonComponent
   ]
 })
 export class SharedModule {

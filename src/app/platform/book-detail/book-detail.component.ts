@@ -6,6 +6,8 @@ import * as Tether from 'tether';
 import { ComponentDispatcher, squirrel, SquirrelData } from '@flowup/squirrel';
 import { ActivatedRoute } from '@angular/router';
 import { detailActions } from '../../reducers/book-detail.reducer';
+import { booksActions } from '../../reducers/books.reducer';
+import { Book } from '../../shared/models/book.model';
 
 @Component({
   selector: 'app-book-detail',
@@ -26,18 +28,22 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
   dispatcher: ComponentDispatcher;
   subscriptions: any[] = [];
   loading: boolean = false;
+  insertLoading: boolean = false;
+  shouldAdd = true;
+  id: number;
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute) {
     this.dispatcher = new ComponentDispatcher(store, this);
     this.route.params.subscribe(params => {
-      let id = +params['id'];
-      if (id) {
+      this.id = +params['id'];
+      if (this.id) {
         this.dispatcher.dispatch(detailActions.API_GET, params['id']);
       }
     });
-    let {dataStream, errorStream} = squirrel(store, 'detail', this);
+    let {dataStream: booksData, errorStream: booksError} = squirrel(store, 'books', this);
+    let {dataStream: detailData, errorStream: detailError} = squirrel(store, 'detail', this);
     this.subscriptions.push(
-      dataStream.subscribe(
+      detailData.subscribe(
         (data: SquirrelData<GRBook>) => {
           console.log('data', data);
           if (!data.data.length) {
@@ -52,10 +58,25 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
       )
     );
     this.subscriptions.push(
-      errorStream.subscribe(
+      detailError.subscribe(
         (error: Error) => {
           console.error(error);
           this.loading = false;
+        }
+      )
+    );
+
+    this.subscriptions.push(
+      booksData.subscribe(
+        (data: SquirrelData<Book>) => {
+          this.insertLoading = data.loading;
+        })
+    );
+    this.subscriptions.push(
+      booksError.subscribe(
+        (error: Error) => {
+          console.error(error);
+          this.insertLoading = false;
         }
       )
     );
@@ -93,6 +114,14 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
       targetAttachment: 'top right',
       targetOffset: `${offset}px 0`
     });
+  }
+
+  addBook(){
+    this.dispatcher.dispatch(booksActions.API_CREATE, this.id);
+  }
+
+  removeBook(){
+    this.dispatcher.dispatch(booksActions.API_DELETE, this.id);
   }
 
 }
