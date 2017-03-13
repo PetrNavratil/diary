@@ -13,6 +13,8 @@ import { NoPaddingCard } from './card/no-padding-card.directive';
 import { MaterialModule } from '@angular/material';
 import { EqualValidator } from './directives/formFieldEqual';
 import { LoadingButtonComponent } from './loading-button/loading-button.component';
+import { BookStatusPipe } from './status.pipe';
+import { CommentComponent } from './comment/comment.component';
 
 @NgModule({
   imports: [
@@ -31,7 +33,9 @@ import { LoadingButtonComponent } from './loading-button/loading-button.componen
     CardComponent,
     NoPaddingCard,
     EqualValidator,
-    LoadingButtonComponent
+    LoadingButtonComponent,
+    BookStatusPipe,
+    CommentComponent
   ],
   exports: [
     BrowserModule,
@@ -47,7 +51,9 @@ import { LoadingButtonComponent } from './loading-button/loading-button.componen
     CardComponent,
     NoPaddingCard,
     EqualValidator,
-    LoadingButtonComponent
+    LoadingButtonComponent,
+    BookStatusPipe,
+    CommentComponent
   ]
 })
 export class SharedModule {

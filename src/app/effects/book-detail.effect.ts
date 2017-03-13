@@ -7,7 +7,7 @@ import { detailActions } from '../reducers/book-detail.reducer';
 import { environment } from '../../environments/environment';
 import { createOptions } from '../shared/createOptions';
 
-const API_ENDPOINT = '/book/';
+const API_ENDPOINT = '/book-detail/';
 
 
 @Injectable()

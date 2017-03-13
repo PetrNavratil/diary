@@ -1,0 +1,24 @@
+.sort-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  app-card {
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+    flex-grow: 1;
+  }
+}
+
+.books-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+
+  .book {
+    height: 280px;
+    width: 250px;
+    background-color: #f44336;
+  }
+}

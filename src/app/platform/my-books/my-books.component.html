@@ -1,0 +1,21 @@
+<app-card>
+  <h2>My Books</h2>
+  <div class="sort-row">
+    <app-card>
+      Search content
+    </app-card>
+    <app-card>
+      Sort By
+    </app-card>
+    <app-card>
+      Show: All
+    </app-card>
+  </div>
+  <div class="books-container">
+    <app-card noPaddingCard *ngFor="let book of books" (click)="goToDetail(book.id)">
+      <div class="book">
+        <app-book-preview [book]="book"></app-book-preview>
+      </div>
+    </app-card>
+  </div>
+</app-card>

@@ -141,20 +141,25 @@ $arrow-size: 40px;
   }
 
   .comments {
-
     display: flex;
+
+    app-comment {
+      width: 100%;
+    }
 
     .my-comment {
       display: flex;
+      margin-right: 20px;
       flex-grow: 1;
       flex-basis: 0;
     }
-
     .other-comments {
       display: flex;
+      flex-direction: column;
       flex-grow: 1;
       flex-basis: 0;
-      flex-direction: column;
+      border-left: 1px solid gray;
+      padding-left: 19px;
     }
   }
 

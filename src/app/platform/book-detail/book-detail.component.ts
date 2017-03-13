@@ -8,6 +8,8 @@ import { ActivatedRoute } from '@angular/router';
 import { detailActions } from '../../reducers/book-detail.reducer';
 import { booksActions } from '../../reducers/books.reducer';
 import { Book } from '../../shared/models/book.model';
+import { BookStatus } from '../../shared/models/book-status.enum';
+import { DiaryComment } from '../../shared/models/comment.model';
 
 @Component({
   selector: 'app-book-detail',
@@ -17,6 +19,7 @@ import { Book } from '../../shared/models/book.model';
 export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   book: GRBook;
+  bookInfo: Book;
   tether: Tether;
   selectedTab: number = 0;
   tabs: string[] = [
@@ -29,15 +32,23 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
   subscriptions: any[] = [];
   loading: boolean = false;
   insertLoading: boolean = false;
-  shouldAdd = true;
   id: number;
+  BookStatus = BookStatus;
+
+  comment: DiaryComment = {
+    id: 1,
+    text: '',
+    date: 'sadasdasd',
+    userName: 'pnik'
+  }
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute) {
     this.dispatcher = new ComponentDispatcher(store, this);
     this.route.params.subscribe(params => {
       this.id = +params['id'];
       if (this.id) {
-        this.dispatcher.dispatch(detailActions.API_GET, params['id']);
+        this.dispatcher.dispatch(detailActions.API_GET, this.id);
+        this.dispatcher.dispatch(booksActions.ADDITIONAL.GET_SINGLE, this.id);
       }
     });
     let {dataStream: booksData, errorStream: booksError} = squirrel(store, 'books', this);
@@ -45,7 +56,6 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     this.subscriptions.push(
       detailData.subscribe(
         (data: SquirrelData<GRBook>) => {
-          console.log('data', data);
           if (!data.data.length) {
             return;
           }
@@ -53,7 +63,6 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
           let div = document.createElement('div');
           div.innerHTML = this.book.description;
           this.book.description = div.textContent || div.innerText || '';
-          console.log('book', this.book);
         }
       )
     );
@@ -69,6 +78,10 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     this.subscriptions.push(
       booksData.subscribe(
         (data: SquirrelData<Book>) => {
+          console.log('book data', data.data);
+          if (data.data.length) {
+            this.bookInfo = data.data[0];
+          }
           this.insertLoading = data.loading;
         })
     );
@@ -122,6 +135,11 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
 
   removeBook(){
     this.dispatcher.dispatch(booksActions.API_DELETE, this.id);
+  }
+
+  changeStatus(event) {
+    this.bookInfo.status = event.value;
+    this.dispatcher.dispatch(booksActions.API_UPDATE, this.bookInfo);
   }
 
 }

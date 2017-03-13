@@ -24,6 +24,7 @@
     "@angular/router": "~3.3.1",
     "@flowup/ng2-api": "^0.4.3",
     "@flowup/ng2-table": "^0.2.0",
+    "@flowup/squirrel": "^0.1.6",
     "@ngrx/core": "^1.2.0",
     "@ngrx/effects": "^2.0.0",
     "@ngrx/store": "^2.2.1",

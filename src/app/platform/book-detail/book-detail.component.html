@@ -4,10 +4,16 @@
       <div class="source-name">
         GOODREADS
       </div>
-      <div class="actions">
-        <app-loading-button [icon]="'add'" [color]="'primary'" [title]="'Add'" [loading]="insertLoading" class="button" *ngIf="shouldAdd" (click)="addBook()"></app-loading-button>
-        <app-loading-button [icon]="'delete'" [color]="'warn'" class="button" [loading]="insertLoading" [title]="'Remove'" *ngIf="!shouldAdd" (click)="removeBook()"></app-loading-button>
-        <app-card>Status: Read / To read</app-card>
+      <div class="actions" *ngIf="bookInfo">
+        <app-loading-button [icon]="'add'" [color]="'primary'" [title]="'Add'" [loading]="insertLoading" class="button"
+                            *ngIf="!bookInfo.inBooks" (click)="addBook()"></app-loading-button>
+        <app-loading-button [icon]="'delete'" [color]="'warn'" class="button" [loading]="insertLoading" [title]="'Remove'"
+                            *ngIf="bookInfo.inBooks" (click)="removeBook()"></app-loading-button>
+        <form>
+          <md-select [disabled]="!bookInfo.inBooks" [ngModel]="bookInfo.status" (change)="changeStatus($event)" name="status">
+            <md-option *ngFor="let item of [0,1,2]" [value]="item">{{item | bookStatus}}</md-option>
+          </md-select>
+        </form>
         <app-card>Export to PDF</app-card>
       </div>
     </div>
@@ -51,25 +57,24 @@
       </div>
     </div>
 
+    <app-card>
+      <div class="comments">
+        <div class="my-comment">
+          <app-comment [editable]="true" [commentData]="comment" [newComment]="true"></app-comment>
+        </div>
+        <div class="other-comments">
+          <!--<app-comment *ngFor="let item of [1,2,3,4,5]"></app-comment>-->
+        </div>
+      </div>
+
+    </app-card>
+
+
     <div class="buy">
       <app-card>
         BUY
       </app-card>
     </div>
-
-    <app-card>
-      <div class="comments">
-        <div class="my-comment">
-          MY COMMENT
-        </div>
-        <div class="other-comments">
-          <div>comment</div>
-          <div>comment</div>
-          <div>comment</div>
-          <div>comment</div>
-        </div>
-      </div>
-    </app-card>
 
     <div class="education">
       <app-card>
