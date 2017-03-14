@@ -8,6 +8,7 @@ import { SearchComponent } from './search/search.component';
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { MyBooksComponent } from './my-books/my-books.component';
 import { BookPreviewComponent } from './book-preview/book-preview.component';
+import { EducationComponent } from './education/education.component';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { BookPreviewComponent } from './book-preview/book-preview.component';
     BookDetailComponent,
     MyBooksComponent,
     BookPreviewComponent,
+    EducationComponent,
   ],
   exports: []
 })

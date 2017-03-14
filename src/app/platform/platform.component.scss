@@ -4,6 +4,8 @@
   .menu-content {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    max-width: calc(100vw - 270px);
+    width: calc(100vw - 270px);
+    box-sizing: border-box;
   }
 }

@@ -29,7 +29,7 @@ $arrow-size: 40px;
       app-card {
         margin-left: 15px;
       }
-      .button{
+      .button {
         height: 40px;
       }
     }
@@ -163,11 +163,17 @@ $arrow-size: 40px;
     }
   }
 
-  .education {
-    .education-content {
-      display: flex;
-      justify-content: center;
-      flex-grow: 1;
+  .education-content {
+
+  }
+
+  .similar-books-container {
+    display: flex;
+    flex-direction: row;
+    app-book-preview {
+      height: 200px;
+      width: 170px;
+      background-color: #f44336;
     }
   }
 }

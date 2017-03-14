@@ -5,6 +5,6 @@ export interface Book {
   title: string;
   author: string;
   imageUrl: string;
-  status: BookStatus;
-  inBooks: boolean;
+  status?: BookStatus;
+  inBooks?: boolean;
 }

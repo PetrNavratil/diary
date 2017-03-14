@@ -1,0 +1,97 @@
+<form novalidate #f="ngForm" (ngSubmit)="saveEducation(f)">
+  <div class="row">
+    <div class="column left">
+      <div class="item">
+        <md-select
+          placeholder="Směr"
+          name="smer"
+          [ngModel]="data.smer"
+          required
+          #smerSelect="ngModel"
+        >
+          <md-option *ngFor="let smer of smers" [value]="smer">
+            {{smer}}
+          </md-option>
+        </md-select>
+        <span class="alert red" *ngIf="smerSelect.invalid && smerSelect.touched">
+          Smer musi byt zadan
+        </span>
+      </div>
+      <div class="item">
+        <md-select
+          placeholder="Druh"
+          name="druh"
+          [ngModel]="data.druh"
+          required
+          #druhSelect="ngModel"
+          (change)="setZanr($event)"
+        >
+          <md-option *ngFor="let druh of druhs" [value]="druh">
+            {{druh}}
+          </md-option>
+        </md-select>
+        <span class="alert red" *ngIf="druhSelect.invalid && druhSelect.touched">
+          Druh musi byt zadan
+        </span>
+      </div>
+      <div class="item">
+        <md-select
+          placeholder="Žánr"
+          name="zanr"
+          [ngModel]="data.zanr"
+          required
+          #zanrSelect="ngModel"
+          [disabled]="druhSelect.invalid"
+        >
+          <md-option *ngFor="let zanr of selectedZanr" [value]="zanr">
+            {{zanr}}
+          </md-option>
+        </md-select>
+        <span class="alert red" *ngIf="zanrSelect.invalid && zanrSelect.touched">
+          Zanr musi byt zadan
+        </span>
+      </div>
+    </div>
+    <div class="column right">
+      <md-input-container>
+          <textarea mdInput mdTextareaAutosize placeholder="Forma" name="forma" [ngModel]="data.forma" #formaInput="ngModel">
+          </textarea>
+      </md-input-container>
+      <md-input-container [dividerColor]="jazykInput.invalid && jazykInput.touched ? 'warn' : 'primary'">
+          <textarea mdInput mdTextareaAutosize placeholder="Jazyk" name="jazyk" [ngModel]="data.jazyk" required #jazykInput="ngModel">
+          </textarea>
+        <md-hint *ngIf="jazykInput.invalid && jazykInput.touched" class="red" align="start">
+          Jazyk musi byt zadan
+        </md-hint>
+      </md-input-container>
+    </div>
+  </div>
+  <div class="row">
+    <md-input-container>
+          <textarea mdInput mdTextareaAutosize placeholder="Postavy" name="postavy" [ngModel]="data.postavy" #postavyInput="ngModel">
+          </textarea>
+    </md-input-container>
+  </div>
+  <div class="row">
+    <md-input-container>
+          <textarea mdInput mdTextareaAutosize placeholder="Obsah" name="obsah" [ngModel]="data.obsah" #obsahInput="ngModel">
+          </textarea>
+    </md-input-container>
+  </div>
+  <div class="row">
+    <md-input-container>
+          <textarea mdInput mdTextareaAutosize placeholder="Tema" name="tema" [ngModel]="data.tema" #temaInput="ngModel">
+          </textarea>
+    </md-input-container>
+  </div>
+  <div class="row">
+    <md-input-container>
+          <textarea mdInput mdTextareaAutosize placeholder="Hodnoceni" name="hodnoceni" [ngModel]="data.hodnoceni"
+                    #hodnoceniInput="ngModel">
+          </textarea>
+    </md-input-container>
+  </div>
+  <div class="row buttons">
+    <button md-raised-button color="primary" [disabled]="!f.valid">Edit changes</button>
+  </div>
+</form>

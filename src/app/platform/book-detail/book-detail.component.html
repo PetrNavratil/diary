@@ -58,6 +58,12 @@
     </div>
 
     <app-card>
+      <div class="similar-books-container">
+        <app-book-preview *ngFor="let book of similarBooks" [book]="book"></app-book-preview>
+      </div>
+    </app-card>
+
+    <app-card>
       <div class="comments">
         <div class="my-comment">
           <app-comment
@@ -82,13 +88,10 @@
         BUY
       </app-card>
     </div>
-
-    <div class="education">
-      <app-card>
-        <div class="education-content">
-          EDUCATION SECTION
-        </div>
-      </app-card>
-    </div>
+    <app-card>
+      <div class="education-content">
+        <app-education></app-education>
+      </div>
+    </app-card>
   </div>
 </app-card>

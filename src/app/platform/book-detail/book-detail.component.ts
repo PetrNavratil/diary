@@ -1,7 +1,7 @@
 import { Component, AfterViewChecked, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../shared/models/store-model';
 import { Store } from '@ngrx/store';
-import { GRBook } from '../../shared/models/goodreadsBook.model';
+import { GRBook, GRSimilarBook } from '../../shared/models/goodreadsBook.model';
 import * as Tether from 'tether';
 import { ComponentDispatcher, squirrel, SquirrelData, foxy, SquirrelState } from '@flowup/squirrel';
 import { ActivatedRoute } from '@angular/router';
@@ -40,6 +40,7 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
   userComment: DiaryComment;
   user: User;
   newComment = false;
+  similarBooks: Book[] = [];
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute) {
     this.dispatcher = new ComponentDispatcher(store, this);
@@ -67,6 +68,9 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
           let div = document.createElement('div');
           div.innerHTML = this.book.description;
           this.book.description = div.textContent || div.innerText || '';
+          console.log('data', data.data[0].similarBooks);
+          this.similarBooks = data.data[0].similarBooks.map(book => this.getSimilarBook(book));
+          console.log('similar', this.similarBooks);
         }
       )
     );
@@ -199,5 +203,14 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
 
   deleteComment(item: any) {
     this.dispatcher.dispatch(commentActions.API_DELETE, item);
+  }
+
+  getSimilarBook(book: GRSimilarBook): Book {
+    let newBook = {};
+    newBook['title'] = book.title;
+    newBook['author'] = book.authors[0].name;
+    newBook['imageUrl'] = book.imageUrl;
+    newBook['id'] = +book.id;
+    return <Book>newBook;
   }
 }
