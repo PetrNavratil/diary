@@ -60,10 +60,17 @@
     <app-card>
       <div class="comments">
         <div class="my-comment">
-          <app-comment [editable]="true" [commentData]="comment" [newComment]="true"></app-comment>
+          <app-comment
+            [editable]="bookInfo?.inBooks"
+            [commentData]="userComment"
+            [newComment]="newComment"
+            *ngIf="userComment"
+            (addComment)="addComment($event)"
+            (deleteComment)="deleteComment($event)"
+            (editComment)="editComment($event)"></app-comment>
         </div>
         <div class="other-comments">
-          <!--<app-comment *ngFor="let item of [1,2,3,4,5]"></app-comment>-->
+          <app-comment *ngFor="let item of comments" [editable]="false" [commentData]="item"></app-comment>
         </div>
       </div>
 

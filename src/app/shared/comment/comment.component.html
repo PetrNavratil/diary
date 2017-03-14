@@ -8,9 +8,9 @@
         <div class="time">{{commentData.date}}</div>
         <i class="material-icons edit" (click)="switchMode()">{{displayed === 'display' ? 'mode_edit' : 'keyboard_backspace' }}</i>
       </div>
-
     </div>
-    <div class="text" [@display]="displayState" (@display.done)="swapState('display')" [ngClass]="{'hidden': displayed !== 'display'}">
+    <div class="text" [@display]="displayState" (click)="switchMode()" (@display.done)="swapState('display')"
+         [ngClass]="{'hidden': displayed !== 'display'}">
       {{commentData.text}}
     </div>
 
@@ -18,7 +18,11 @@
       <div #commentEdit class="text editable" contenteditable="true" (focus)="removePlaceholder()" (blur)="setPlaceholder()">
         {{commentData.text.length > 0 ? commentData.text : commentPlaceholder}}
       </div>
-      <app-loading-button [title]="newComment ? 'Add new' : 'Edit'" class="button" (click)="edit()"></app-loading-button>
+      <div class="buttons">
+        <app-loading-button [title]="'Remove'" [color]="'warn'" class="button" (click)="remove()" *ngIf="!newComment"></app-loading-button>
+        <app-loading-button [title]="'Add new'" class="button" (click)="add()" *ngIf="newComment"></app-loading-button>
+        <app-loading-button [title]="'Edit'" class="button" (click)="edit()" *ngIf="!newComment"></app-loading-button>
+      </div>
     </div>
   </div>
 </div>

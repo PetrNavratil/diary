@@ -61,10 +61,13 @@
     .edit-comment {
       display: flex;
       flex-direction: column;
-      .button {
-        align-self: flex-end;
+      .buttons {
+        display: flex;
+        justify-content: flex-end;
         margin-top: 10px;
-
+        .button {
+          margin-left: 10px;
+        }
       }
     }
 

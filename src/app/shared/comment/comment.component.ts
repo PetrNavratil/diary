@@ -38,6 +38,8 @@ export class CommentComponent implements OnChanges {
   @Input() editable = false;
   @Input() commentData: DiaryComment;
   @Output() editComment = new EventEmitter<DiaryComment>();
+  @Output() addComment = new EventEmitter<DiaryComment>();
+  @Output() deleteComment = new EventEmitter<DiaryComment>();
   @ViewChild('commentEdit') comment: ElementRef;
   commentPlaceholder = 'Add text by typing here...';
 
@@ -46,6 +48,9 @@ export class CommentComponent implements OnChanges {
   displayed = 'display';
 
   switchMode() {
+    if (!this.editable) {
+      return;
+    }
     if (this.displayed === 'display') {
       this.displayState = this.displayState === 'inactive' ? 'active' : 'inactive';
     } else {
@@ -73,6 +78,17 @@ export class CommentComponent implements OnChanges {
     }
   }
 
+  add() {
+    let text = this.comment.nativeElement.textContent.trim();
+    if (text.length > 0 && text !== this.commentPlaceholder) {
+      this.addComment.emit(Object.assign({}, this.commentData, {text: text}));
+    }
+  }
+
+  remove() {
+    this.deleteComment.emit(this.commentData);
+  }
+
   removePlaceholder() {
     if (this.comment.nativeElement.textContent.trim() === this.commentPlaceholder) {
       this.comment.nativeElement.textContent = '';
@@ -88,7 +104,9 @@ export class CommentComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    if (this.newComment) {
+    if (this.newComment && this.displayed !== 'edit') {
+      this.switchMode();
+    } else if (!this.newComment) {
       this.switchMode();
     }
   }

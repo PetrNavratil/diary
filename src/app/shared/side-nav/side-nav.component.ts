@@ -28,4 +28,9 @@ export class SideNavComponent implements OnInit {
   ngOnInit() {
   }
 
+  logout() {
+    localStorage.clear();
+    location.reload();
+  }
+
 }

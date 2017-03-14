@@ -19,6 +19,8 @@ import { AuthEffect } from './effects/auth.effect';
 import { authReducer } from './reducers/auth.reducer';
 import { booksReducer } from './reducers/books.reducer';
 import { BookEffect } from './effects/books.effect';
+import { commentReducer } from './reducers/comments.reducer';
+import { CommentsEffect } from './effects/comment.effects';
 
 @NgModule({
   declarations: [
@@ -37,12 +39,14 @@ import { BookEffect } from './effects/books.effect';
       search: searchReducer,
       detail: detailReducer,
       auth: authReducer,
-      books: booksReducer
+      books: booksReducer,
+      comments: commentReducer
     }),
     EffectsModule.runAfterBootstrap(SearchEffect),
     EffectsModule.runAfterBootstrap(BookDetail),
     EffectsModule.runAfterBootstrap(AuthEffect),
     EffectsModule.runAfterBootstrap(BookEffect),
+    EffectsModule.runAfterBootstrap(CommentsEffect),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
 
 
