@@ -92,6 +92,6 @@
     </md-input-container>
   </div>
   <div class="row buttons">
-    <button md-raised-button color="primary" [disabled]="!f.valid">Edit changes</button>
+    <button md-raised-button color="primary" [disabled]="!f.valid">{{data.id === 0 ? 'Add new educational' : 'Edit educational'}}</button>
   </div>
 </form>

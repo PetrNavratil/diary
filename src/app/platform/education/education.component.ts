@@ -9,18 +9,7 @@ import { EducationModel } from '../../shared/models/education.model';
 })
 export class EducationComponent implements OnChanges {
 
-  @Input() data: EducationModel = {
-    druh: '',
-    zanr: '',
-    smer: '',
-    forma: '',
-    jazyk: '',
-    postavy: '',
-    obsah: '',
-    tema: '',
-    hodnoceni: ''
-  };
-  @Input() newEdication = true;
+  @Input() data: EducationModel;
   @Output() dataUpdate: EventEmitter<EducationModel> = new EventEmitter<EducationModel>();
 
   selectedZanr = [];
@@ -98,18 +87,18 @@ export class EducationComponent implements OnChanges {
   ];
 
   ngOnChanges() {
-    if (this.data.druh) {
+    if (this.data && this.data.zanr.length) {
       this.selectedZanr = this.zanrs[this.data.druh];
     }
   }
 
 
-  saveEducation(form) {
+  saveEducation(form: any) {
+    form.value.id = this.data.id;
     this.dataUpdate.emit(form.value);
   }
 
   setZanr(druh: any) {
     this.selectedZanr = this.zanrs[druh.value];
   }
-
 }

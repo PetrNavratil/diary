@@ -1,11 +1,13 @@
 .container {
   display: flex;
+  flex-direction: column;
 
   .menu-content {
     display: flex;
-    flex-direction: column;
-    max-width: calc(100vw - 270px);
-    width: calc(100vw - 270px);
-    box-sizing: border-box;
+    .router {
+      flex-grow: 1;
+      flex-basis: 0;
+      overflow: hidden;
+    }
   }
 }

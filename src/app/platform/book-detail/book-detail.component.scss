@@ -170,10 +170,14 @@ $arrow-size: 40px;
   .similar-books-container {
     display: flex;
     flex-direction: row;
+    overflow: hidden;
     app-book-preview {
-      height: 200px;
-      width: 170px;
+      min-height: 200px;
+      min-width: 170px;
       background-color: #f44336;
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { GRBook, GRSimilarBook } from '../../shared/models/goodreadsBook.model';
 import * as Tether from 'tether';
 import { ComponentDispatcher, squirrel, SquirrelData, foxy, SquirrelState } from '@flowup/squirrel';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { detailActions } from '../../reducers/book-detail.reducer';
 import { booksActions } from '../../reducers/books.reducer';
 import { Book } from '../../shared/models/book.model';
@@ -12,6 +12,10 @@ import { BookStatus } from '../../shared/models/book-status.enum';
 import { DiaryComment } from '../../shared/models/comment.model';
 import { User } from '../../shared/models/user.model';
 import { commentActions } from '../../reducers/comments.reducer';
+import { environment } from '../../../environments/environment';
+import { createOptions } from '../../shared/createOptions';
+import { Http } from '@angular/http';
+import { EducationModel } from '../../shared/models/education.model';
 
 @Component({
   selector: 'app-book-detail',
@@ -42,7 +46,7 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
   newComment = false;
   similarBooks: Book[] = [];
 
-  constructor(private store: Store<AppState>, private route: ActivatedRoute) {
+  constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router, private http: Http) {
     this.dispatcher = new ComponentDispatcher(store, this);
     this.route.params.subscribe(params => {
       this.id = +params['id'];
@@ -68,9 +72,12 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
           let div = document.createElement('div');
           div.innerHTML = this.book.description;
           this.book.description = div.textContent || div.innerText || '';
-          console.log('data', data.data[0].similarBooks);
-          this.similarBooks = data.data[0].similarBooks.map(book => this.getSimilarBook(book));
-          console.log('similar', this.similarBooks);
+          if (data.data[0].similarBooks) {
+            this.similarBooks = data.data[0].similarBooks.map(book => this.getSimilarBook(book));
+          } else {
+            this.similarBooks = [];
+          }
+
         }
       )
     );
@@ -212,5 +219,19 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     newBook['imageUrl'] = book.imageUrl;
     newBook['id'] = +book.id;
     return <Book>newBook;
+  }
+
+  goToBook(book: Book) {
+    this.http.post(`${environment.apiUrl}/book`, book, createOptions()).subscribe(
+      data => {
+        this.router.navigate([`platform/detail/${data.json().id}`]);
+      }
+    );
+  }
+
+  setEducational(educational: EducationModel) {
+    console.log('form', educational);
+    this.bookInfo.educational = educational;
+    this.dispatcher.dispatch(booksActions.API_UPDATE, this.bookInfo);
   }
 }

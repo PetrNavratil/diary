@@ -59,7 +59,7 @@
 
     <app-card>
       <div class="similar-books-container">
-        <app-book-preview *ngFor="let book of similarBooks" [book]="book"></app-book-preview>
+        <app-book-preview *ngFor="let simBook of similarBooks" [book]="simBook" (click)="goToBook(simBook)"></app-book-preview>
       </div>
     </app-card>
 
@@ -88,9 +88,9 @@
         BUY
       </app-card>
     </div>
-    <app-card>
+    <app-card *ngIf="bookInfo?.inBooks">
       <div class="education-content">
-        <app-education></app-education>
+        <app-education [data]="bookInfo.educational" (dataUpdate)="setEducational($event)"></app-education>
       </div>
     </app-card>
   </div>
