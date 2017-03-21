@@ -16,6 +16,8 @@ import { environment } from '../../../environments/environment';
 import { createOptions } from '../../shared/createOptions';
 import { Http } from '@angular/http';
 import { EducationModel } from '../../shared/models/education.model';
+import { Shelf } from '../../shared/models/shelf.model';
+import { shelvesActions } from '../../reducers/shelves.reducer';
 
 @Component({
   selector: 'app-book-detail',
@@ -45,6 +47,9 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
   user: User;
   newComment = false;
   similarBooks: Book[] = [];
+  shelves: Shelf[] = [];
+  inShelves: number[] = [];
+  newShelf = '';
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router, private http: Http) {
     this.dispatcher = new ComponentDispatcher(store, this);
@@ -53,6 +58,7 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
       if (this.id) {
         this.dispatcher.dispatch(detailActions.API_GET, this.id);
         this.dispatcher.dispatch(booksActions.ADDITIONAL.GET_SINGLE, this.id);
+        this.dispatcher.dispatch(shelvesActions.API_GET);
         if (this.user) {
           this.dispatcher.dispatch(commentActions.API_GET, this.id);
         }
@@ -62,6 +68,7 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     let {dataStream: detailData, errorStream: detailError} = squirrel(store, 'detail', this);
     let {dataStream: commentsData, errorStream: commentsError} = squirrel(store, 'comments', this);
     let {dataStream: userData, errorStream: userError} = squirrel(store, 'auth', this);
+    let {dataStream: shelvesData, errorStream: shelvesError} = squirrel(store, 'shelves', this);
     this.subscriptions.push(
       detailData.subscribe(
         (data: SquirrelData<GRBook>) => {
@@ -151,6 +158,25 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
         })
     );
 
+    this.subscriptions.push(
+      shelvesError.subscribe(
+        (error: Error) => {
+          console.error(error);
+        }
+      )
+    );
+
+    this.subscriptions.push(
+      shelvesData.subscribe(
+        (data: SquirrelData<Shelf>) => {
+          console.log('shelves', data.data);
+          this.newShelf = '';
+          this.shelves = data.data;
+          this.inShelves = this.shelves.filter(shelve => shelve.books.some(book => book.id === this.id)).map(shelve => shelve.id);
+          console.log('in shelves', this.inShelves);
+        })
+    );
+
 
   }
 
@@ -233,5 +259,23 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     console.log('form', educational);
     this.bookInfo.educational = educational;
     this.dispatcher.dispatch(booksActions.API_UPDATE, this.bookInfo);
+  }
+
+  isInShelve(id: number): boolean {
+    return this.inShelves.indexOf(id) > -1 ? true : false;
+  }
+
+  toggleShelf(id: number) {
+    if (this.isInShelve(id)) {
+      this.dispatcher.dispatch(shelvesActions.ADDITIONAL.API_REMOVE_BOOK, {id: id, book: this.bookInfo});
+    } else {
+      this.dispatcher.dispatch(shelvesActions.ADDITIONAL.API_ADD_BOOK, {id: id, book: this.bookInfo});
+    }
+  }
+
+  addNewShelf() {
+    if (this.newShelf.length > 0) {
+      this.dispatcher.dispatch(shelvesActions.API_CREATE, {name: this.newShelf});
+    }
   }
 }

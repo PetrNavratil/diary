@@ -15,6 +15,9 @@ import { EqualValidator } from './directives/formFieldEqual';
 import { LoadingButtonComponent } from './loading-button/loading-button.component';
 import { BookStatusPipe } from './status.pipe';
 import { CommentComponent } from './comment/comment.component';
+import { DropdownRowComponent } from './dropdown-row/dropdown-row.component';
+import { DropdownComponent } from './dropdown/dropdown.component';
+import { TruncatePipe } from './truncate.pipe';
 
 @NgModule({
   imports: [
@@ -35,7 +38,10 @@ import { CommentComponent } from './comment/comment.component';
     EqualValidator,
     LoadingButtonComponent,
     BookStatusPipe,
-    CommentComponent
+    CommentComponent,
+    DropdownRowComponent,
+    DropdownComponent,
+    TruncatePipe
   ],
   exports: [
     BrowserModule,
@@ -53,7 +59,10 @@ import { CommentComponent } from './comment/comment.component';
     EqualValidator,
     LoadingButtonComponent,
     BookStatusPipe,
-    CommentComponent
+    CommentComponent,
+    DropdownRowComponent,
+    DropdownComponent,
+    TruncatePipe
   ]
 })
 export class SharedModule {

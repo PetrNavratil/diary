@@ -19,6 +19,10 @@ export class SideNavComponent implements OnInit {
     {
       name: 'Book detail',
       link: 'detail'
+    },
+    {
+      name: 'Shelves',
+      link: 'shelves'
     }
   ];
 

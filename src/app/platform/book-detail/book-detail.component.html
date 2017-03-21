@@ -14,7 +14,20 @@
             <md-option *ngFor="let item of [0,1,2]" [value]="item">{{item | bookStatus}}</md-option>
           </md-select>
         </form>
-        <app-card>Export to PDF</app-card>
+        <app-dropdown>
+          <div class="shelves">
+            <div class="shelf" *ngFor="let shelf of shelves" (click)="toggleShelf(shelf.id)">
+              <span class="name">{{shelf.name | truncate: 13}}</span>
+              <i class="material-icons shelf-icon">{{isInShelve(shelf.id) ? 'delete' : 'add'}}</i>
+            </div>
+            <div class="shelf new">
+              <md-input-container>
+                <input mdInput placeholder="Add new shelf" type="text" [(ngModel)]="newShelf">
+              </md-input-container>
+              <button class="button" md-raised-button color="primary" (click)="addNewShelf()">Add <i class="material-icons">add</i></button>
+            </div>
+          </div>
+        </app-dropdown>
       </div>
     </div>
 
@@ -89,9 +102,12 @@
       </app-card>
     </div>
     <app-card *ngIf="bookInfo?.inBooks">
-      <div class="education-content">
-        <app-education [data]="bookInfo.educational" (dataUpdate)="setEducational($event)"></app-education>
-      </div>
+      <app-dropdown-row>
+        <div class="header" row-header>SHOW EDUCATIONAL</div>
+        <div class="education-content" dropdown-content>
+          <app-education [data]="bookInfo.educational" (dataUpdate)="setEducational($event)"></app-education>
+        </div>
+      </app-dropdown-row>
     </app-card>
   </div>
 </app-card>

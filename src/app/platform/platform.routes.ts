@@ -3,6 +3,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SearchComponent } from './search/search.component';
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { MyBooksComponent } from './my-books/my-books.component';
+import { ShelvesComponent } from './shelves/shelves.component';
 
 export const platformRoutes: Routes = [{
   path: '',
@@ -11,7 +12,8 @@ export const platformRoutes: Routes = [{
     {path: 'search', component: SearchComponent},
     {path: 'detail/:id', component: BookDetailComponent},
     {path: 'detail', component: BookDetailComponent},
-    {path: 'books', component: MyBooksComponent}
+    {path: 'books', component: MyBooksComponent},
+    {path: 'shelves', component: ShelvesComponent}
   ]
 }];
 
