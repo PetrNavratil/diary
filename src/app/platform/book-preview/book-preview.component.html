@@ -1,43 +1,21 @@
-<div class="book-preview-container" *ngIf="book">
-  <div class="photo-cover" [style.backgroundImage]="sanitize(book.imageUrl)">
-    <span>{{book.title}}</span>
+<div class="book-preview-container" (mouseenter)="hover()" (mouseleave)="leave()">
+  <div class="photo" [style.backgroundImage]="sanitize(book.imageUrl)" [@hover]="state">
+    <div class="photo-title">
+      {{book.title}}
+    </div>
   </div>
   <div class="book-info">
-    <div class="photo">
-      <img src="{{book.imageUrl}}" alt="TITLE AUTHOR">
+    <div class="item">
+      <div class="label">Title</div>
+      <div class="value">{{book.title}}</div>
     </div>
     <div class="item">
-      <div class="label">
-        TITLE
-      </div>
-      <div class="value">
-        {{book.title}}
-      </div>
+      <div class="label">Author</div>
+      <div class="value">{{book.author}}</div>
     </div>
-    <div class="item">
-      <div class="label">
-        AUTHOR
-      </div>
-      <div class="value">
-        {{book.author}}
-      </div>
-    </div>
-    <div class="item" *ngIf="book.status">
-      <div class="label">
-        STATUS
-      </div>
-      <div class="value">
-        {{book.status}}
-      </div>
-    </div>
-    <div class="item">
-      <div class="label">
-        SHELVES
-      </div>
-      <div class="value">
-        shelves
-      </div>
+    <div class="item" *ngIf="book?.status >= 0">
+      <div class="label">Status</div>
+      <div class="value">{{book.status | bookStatus}}</div>
     </div>
   </div>
 </div>
-

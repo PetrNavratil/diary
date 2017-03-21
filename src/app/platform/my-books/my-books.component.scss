@@ -1,3 +1,5 @@
+@import '../../theme';
+
 .sort-row {
   display: flex;
   flex-direction: row;
@@ -17,8 +19,7 @@
   flex-direction: row;
 
   .book {
-    height: 280px;
-    width: 250px;
-    background-color: #f44336;
+    height: $book-height;
+    width: $book-width;
   }
 }

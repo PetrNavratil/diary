@@ -1,8 +1,7 @@
-<button md-raised-button color="primary" class="dropdown-button" (click)="enable()">Manage shelves
-  <i class="material-icons" *ngIf="state === 'collapsed'">arrow_drop_down</i>
-  <i class="material-icons" *ngIf="state === 'expanded'">arrow_drop_up</i>
+<button md-raised-button color="primary" [id]="'dropdown-button' +getId()" class="dropdown-button" (click)="toggle()">{{buttonTitle}}
+  <i class="material-icons dropdown-icon" [ngClass]="{'expanded': state === 'expanded'}">arrow_drop_down</i>
 </button>
 
-<div #dropdownContent class="dropdown-content" [@expandable]="state">
+<div #dropdownContent [id]="'dropdown-content' + getId()" class="dropdown-content" [@expandable]="state" (click)="dropdownClick()">
   <ng-content></ng-content>
 </div>

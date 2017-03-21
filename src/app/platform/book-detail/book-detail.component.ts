@@ -221,8 +221,8 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     this.dispatcher.dispatch(booksActions.API_DELETE, this.id);
   }
 
-  changeStatus(event) {
-    this.bookInfo.status = event.value;
+  changeStatus(status: number) {
+    this.bookInfo.status = status;
     this.dispatcher.dispatch(booksActions.API_UPDATE, this.bookInfo);
   }
 

@@ -7,13 +7,15 @@ export class BookStatusPipe {
   transform(value: number): string {
     switch (value) {
       case BookStatus.NOT_READ:
-        return 'NOT READ';
+        return 'Not read';
       case BookStatus.TO_READ:
-        return 'TO READ';
+        return 'To read';
       case BookStatus.READING:
-        return 'READING';
+        return 'Reading';
+      case BookStatus.READ:
+        return 'Read';
       default:
-        return 'NOT READ';
+        return 'Not read';
     }
   }
 }

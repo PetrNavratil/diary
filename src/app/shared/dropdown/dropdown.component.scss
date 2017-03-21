@@ -2,6 +2,12 @@ $width: 162px;
 
 .dropdown-button {
   width: $width;
+  .dropdown-icon {
+    transition: transform .5s;
+    &.expanded {
+      transform: rotate(180deg);
+    }
+  }
 }
 
 .dropdown-content {

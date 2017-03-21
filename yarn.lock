@@ -119,6 +119,24 @@
     ts-helpers "^1.1.1"
     zone.js "~0.7.2"
 
+"@flowup/squirrel@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@flowup/squirrel/-/squirrel-0.1.6.tgz#7018f4836eb42c8a087e359b7d2de42c9c1d45a6"
+  dependencies:
+    "@angular/common" "~2.3.1"
+    "@angular/compiler" "~2.3.1"
+    "@angular/core" "~2.3.1"
+    "@angular/http" "~2.3.1"
+    "@ngrx/core" "^1.2.0"
+    "@ngrx/effects" "^2.0.0"
+    "@ngrx/store" "^2.2.1"
+    core-js "^2.4.1"
+    immutable "^3.8.1"
+    reflect-metadata "0.1.8"
+    rxjs "5.0.0-rc.4"
+    ts-helpers "^1.1.1"
+    zone.js "~0.7.2"
+
 "@ngrx/core@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@ngrx/core/-/core-1.2.0.tgz#882b46abafa2e0e6d887cb71a1b2c2fa3e6d0dc6"

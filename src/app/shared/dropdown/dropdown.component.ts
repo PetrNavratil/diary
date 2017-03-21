@@ -1,6 +1,6 @@
 import {
   Component, AfterViewChecked, OnDestroy, ElementRef, animate, transition, style,
-  state, trigger, ViewChild
+  state, trigger, ViewChild, Input
 } from '@angular/core';
 import * as Tether from 'tether';
 
@@ -24,6 +24,8 @@ export class DropdownComponent implements AfterViewChecked, OnDestroy {
   tether: Tether;
   state: string = COLLAPSED;
   @ViewChild('dropdownContent') dropdown: ElementRef;
+  @Input() buttonTitle: string = '';
+  @Input() closeOnClick: boolean = false;
 
   constructor(private el: ElementRef) {
     document.body.addEventListener('click', (event) => {
@@ -33,14 +35,14 @@ export class DropdownComponent implements AfterViewChecked, OnDestroy {
     });
   }
 
-  enable() {
+  toggle() {
     this.state = this.state === EXPANDED ? COLLAPSED : EXPANDED;
   }
 
   ngAfterViewChecked() {
     this.tether = new Tether({
-      element: '.dropdown-content',
-      target: '.dropdown-button',
+      element: `#dropdown-content${this.getId()}`,
+      target: `#dropdown-button${this.getId()}`,
       attachment: 'top left',
       targetAttachment: 'bottom left'
     });
@@ -50,6 +52,17 @@ export class DropdownComponent implements AfterViewChecked, OnDestroy {
     this.tether.disable();
     this.tether.destroy();
     this.dropdown.nativeElement.parentElement.removeChild(this.dropdown.nativeElement);
+  }
+
+  getId(): string {
+    let splitted = this.buttonTitle.split(' ');
+    return splitted[splitted.length - 1];
+  }
+
+  dropdownClick() {
+    if (this.closeOnClick) {
+      this.toggle()
+    }
   }
 
 }

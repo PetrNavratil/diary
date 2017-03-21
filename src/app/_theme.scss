@@ -12,6 +12,10 @@ $side-nav-height: 60px;
 $loader-background-color: #816955;
 $loader-spinner-color: #40352B;
 
+$book-height: 250px;
+$book-width: 200px;
+$book-background: linear-gradient(150deg, rgba(#f44336, .9) 40%, rgba(#f44336, .05));
+
 @font-face {
   font-family: 'hand-written';
   src: url('../assets/font/CAROBTN_.TTF') format('truetype');
