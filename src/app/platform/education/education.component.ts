@@ -1,5 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter, OnChanges } from '@angular/core';
 import { EducationModel } from '../../shared/models/education.model';
+import { Dictionary } from './dictionary';
 
 @Component({
   selector: 'app-education',
@@ -12,6 +13,8 @@ export class EducationComponent implements OnChanges {
   @Input() data: EducationModel;
   @Output() dataUpdate: EventEmitter<EducationModel> = new EventEmitter<EducationModel>();
 
+  hintVisible = false;
+  hint = '';
   selectedZanr = [];
   druhs = [
     'Lyrika',
@@ -100,5 +103,21 @@ export class EducationComponent implements OnChanges {
 
   setZanr(druh: any) {
     this.selectedZanr = this.zanrs[druh.value];
+  }
+
+  showHint(key: string) {
+    let dictKey = key.replace(/-|\(|\)| /g, '');
+    this.hint = Dictionary[dictKey];
+    this.hintVisible = true;
+  }
+
+
+  hideHint(source?: any) {
+    if (source && document.activeElement === source) {
+      return;
+    } else {
+      this.hintVisible = false;
+    }
+
   }
 }

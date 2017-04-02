@@ -18,6 +18,9 @@ import { Http } from '@angular/http';
 import { EducationModel } from '../../shared/models/education.model';
 import { Shelf } from '../../shared/models/shelf.model';
 import { shelvesActions } from '../../reducers/shelves.reducer';
+import { trackingActions } from '../../reducers/tracking.reducer';
+import { StoredTracking } from '../../shared/models/tracking.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-book-detail',
@@ -50,6 +53,11 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
   shelves: Shelf[] = [];
   inShelves: number[] = [];
   newShelf = '';
+  trackings: StoredTracking = {
+    trackings: [],
+    lastTracking: null
+  };
+  tracked: string = '';
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router, private http: Http) {
     this.dispatcher = new ComponentDispatcher(store, this);
@@ -59,9 +67,7 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
         this.dispatcher.dispatch(detailActions.API_GET, this.id);
         this.dispatcher.dispatch(booksActions.ADDITIONAL.GET_SINGLE, this.id);
         this.dispatcher.dispatch(shelvesActions.API_GET);
-        if (this.user) {
-          this.dispatcher.dispatch(commentActions.API_GET, this.id);
-        }
+        this.dispatcher.dispatch(commentActions.API_GET, this.id);
       }
     });
     let {dataStream: booksData, errorStream: booksError} = squirrel(store, 'books', this);
@@ -69,6 +75,7 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     let {dataStream: commentsData, errorStream: commentsError} = squirrel(store, 'comments', this);
     let {dataStream: userData, errorStream: userError} = squirrel(store, 'auth', this);
     let {dataStream: shelvesData, errorStream: shelvesError} = squirrel(store, 'shelves', this);
+    let {dataStream: trackingData, errorStream: trackingError} = squirrel(store, 'tracking', this);
     this.subscriptions.push(
       detailData.subscribe(
         (data: SquirrelData<GRBook>) => {
@@ -84,6 +91,11 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
           } else {
             this.similarBooks = [];
           }
+          if (this.bookInfo && this.bookInfo.educational.obsah.length === 0) {
+            this.bookInfo.educational.obsah = this.book.description;
+            this.bookInfo = Object.assign({}, this.bookInfo);
+          }
+
 
         }
       )
@@ -103,6 +115,10 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
           console.log('book data', data.data);
           if (data.data.length) {
             this.bookInfo = data.data[0];
+            if (this.bookInfo.inBooks) {
+              console.log('getting tracking');
+              this.dispatcher.dispatch(trackingActions.API_GET, this.id);
+            }
           }
           this.insertLoading = data.loading;
         })
@@ -153,7 +169,6 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
           console.log('user data', data.data);
           if (data.data.length) {
             this.user = data.data[0];
-            this.dispatcher.dispatch(commentActions.API_GET, this.id);
           }
         })
     );
@@ -177,6 +192,33 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
         })
     );
 
+    this.subscriptions.push(
+      trackingError.subscribe(
+        (error: Error) => {
+          console.error(error);
+        }
+      )
+    );
+
+    this.subscriptions.push(
+      trackingData.subscribe(
+        (data: SquirrelData<StoredTracking>) => {
+          if (data.data.length) {
+            this.trackings = data.data[0];
+            console.log('start', moment(this.trackings.lastTracking.start).format('hh:mm:ss'));
+            console.log('now', moment().format('hh:mm:ss'));
+          }
+        })
+    );
+
+    setInterval(() => {
+      if (this.trackings && this.trackings.lastTracking) {
+        if (this.trackings.lastTracking.end === '0001-01-01T00:00:00Z' && this.trackings.lastTracking.bookId === this.id) {
+          this.tracked = moment(moment().diff(moment(this.trackings.lastTracking.start))).format('hh:mm:ss');
+          // console.log('tracked', this.tracked);
+        }
+      }
+    }, 1000);
 
   }
 
@@ -278,4 +320,27 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
       this.dispatcher.dispatch(shelvesActions.API_CREATE, {name: this.newShelf});
     }
   }
+
+  startTracking() {
+    if (this.bookInfo.status !== BookStatus.READING) {
+      // this.changeStatus(BookStatus.READING);
+    }
+    this.dispatcher.dispatch(trackingActions.ADDITIONAL.START, this.id);
+  }
+
+  stopTracking() {
+    this.dispatcher.dispatch(trackingActions.ADDITIONAL.END, this.id);
+  }
+
+  get shouldStart(): boolean {
+    if (!this.trackings.lastTracking) {
+      return false;
+    }
+    if (this.trackings.lastTracking.end !== '0001-01-01T00:00:00Z') {
+      return true;
+    } else {
+      return this.trackings.lastTracking.bookId === this.id ? false : true;
+    }
+  }
+
 }

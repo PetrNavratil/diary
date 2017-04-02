@@ -26,6 +26,7 @@ export class DropdownComponent implements AfterViewChecked, OnDestroy {
   @ViewChild('dropdownContent') dropdown: ElementRef;
   @Input() buttonTitle: string = '';
   @Input() closeOnClick: boolean = false;
+  @Input() disabled = false;
 
   constructor(private el: ElementRef) {
     document.body.addEventListener('click', (event) => {

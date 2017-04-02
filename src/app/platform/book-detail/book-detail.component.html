@@ -2,23 +2,28 @@
   <div class="book-detail-container">
     <div class="actions-row">
       <div class="source-name">
-        GOODREADS
+        GOODREADS {{tracked}}
       </div>
       <div class="actions" *ngIf="bookInfo">
         <app-loading-button [icon]="'add'" [color]="'primary'" [title]="'Add'" [loading]="insertLoading" class="button action-item"
                             *ngIf="!bookInfo.inBooks" (click)="addBook()"></app-loading-button>
         <app-loading-button [icon]="'delete'" [color]="'warn'" class="button action-item" [loading]="insertLoading" [title]="'Remove'"
                             *ngIf="bookInfo.inBooks" (click)="removeBook()"></app-loading-button>
-        <app-dropdown class="action-item" [buttonTitle]="bookInfo.status | bookStatus" [closeOnClick]="true">
+        <app-loading-button [icon]="'play_circle_outline'" [color]="'primary'" class="button action-item" [loading]="false"
+                            [title]="'Start tracking'"
+                            *ngIf="bookInfo.inBooks && shouldStart" (click)="startTracking()"></app-loading-button>
+        <app-loading-button [icon]="'stop'" [color]="'warn'" class="button action-item" [loading]="false"
+                            [title]="'Stop tracking ' + tracked"
+                            *ngIf="bookInfo.inBooks && !shouldStart" (click)="stopTracking()"></app-loading-button>
+        <app-dropdown class="action-item" [buttonTitle]="bookInfo.status | bookStatus" [closeOnClick]="true" [disabled]="!bookInfo.inBooks">
           <div class="action-dropdown">
             <div class="item" *ngFor="let item of [0,1,2,3]" (click)="changeStatus(item)"
                  [ngClass]="{'selected': bookInfo.status === item }">
               <span class="name">{{item | bookStatus}}</span>
-              <!--<i class="material-icons item-icon">{{isInShelve(shelf.id) ? 'delete' : 'add'}}</i>-->
             </div>
           </div>
         </app-dropdown>
-        <app-dropdown class="action-item" [buttonTitle]="'Manage shelves'">
+        <app-dropdown class="action-item" [buttonTitle]="'Manage shelves'" [disabled]="!bookInfo.inBooks">
           <div class="action-dropdown">
             <div class="item" *ngFor="let shelf of shelves" (click)="toggleShelf(shelf.id)">
               <span class="name">{{shelf.name | truncate: 13}}</span>

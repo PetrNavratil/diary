@@ -8,8 +8,8 @@
           [ngModel]="data.smer"
           required
           #smerSelect="ngModel"
-        >
-          <md-option *ngFor="let smer of smers" [value]="smer">
+          (mouseenter)="showHint('smer')" (mouseleave)="hideHint()">
+          <md-option *ngFor="let smer of smers" [value]="smer" (mouseenter)="showHint(smer)" (mouseleave)="hideHint()">
             {{smer}}
           </md-option>
         </md-select>
@@ -25,8 +25,9 @@
           required
           #druhSelect="ngModel"
           (change)="setZanr($event)"
+          (mouseenter)="showHint('druh')" (mouseleave)="hideHint()"
         >
-          <md-option *ngFor="let druh of druhs" [value]="druh">
+          <md-option *ngFor="let druh of druhs" [value]="druh" (mouseenter)="showHint(druh)" (mouseleave)="hideHint()">
             {{druh}}
           </md-option>
         </md-select>
@@ -42,8 +43,9 @@
           required
           #zanrSelect="ngModel"
           [disabled]="druhSelect.invalid"
+          (mouseenter)="showHint('zanr')" (mouseleave)="hideHint()"
         >
-          <md-option *ngFor="let zanr of selectedZanr" [value]="zanr">
+          <md-option *ngFor="let zanr of selectedZanr" [value]="zanr" (mouseenter)="showHint(zanr)" (mouseleave)="hideHint()">
             {{zanr}}
           </md-option>
         </md-select>
@@ -51,43 +53,63 @@
           Zanr musi byt zadan
         </span>
       </div>
+      <div class="item">
+        <md-input-container>
+          <textarea #forma mdInput mdTextareaAutosize placeholder="Forma" name="forma" [ngModel]="data.forma" #formaInput="ngModel"
+                    (focus)="showHint('forma')" (blur)="hideHint()"
+                    (mouseenter)="showHint('forma')" (mouseleave)="hideHint(forma)">
+          </textarea>
+        </md-input-container>
+      </div>
+      <div class="item">
+        <md-input-container [dividerColor]="jazykInput.invalid && jazykInput.touched ? 'warn' : 'primary'">
+          <textarea #jazyk mdInput mdTextareaAutosize placeholder="Jazyk" name="jazyk" [ngModel]="data.jazyk" required #jazykInput="ngModel"
+                    (focus)="showHint('jazyk')" (blur)="hideHint()"
+                    (mouseenter)="showHint('jazyk')" (mouseleave)="hideHint(jazyk)">
+          </textarea>
+          <md-hint *ngIf="jazykInput.invalid && jazykInput.touched" class="red" align="start">
+            Jazyk musi byt zadan
+          </md-hint>
+        </md-input-container>
+      </div>
     </div>
     <div class="column right">
-      <md-input-container>
-          <textarea mdInput mdTextareaAutosize placeholder="Forma" name="forma" [ngModel]="data.forma" #formaInput="ngModel">
-          </textarea>
-      </md-input-container>
-      <md-input-container [dividerColor]="jazykInput.invalid && jazykInput.touched ? 'warn' : 'primary'">
-          <textarea mdInput mdTextareaAutosize placeholder="Jazyk" name="jazyk" [ngModel]="data.jazyk" required #jazykInput="ngModel">
-          </textarea>
-        <md-hint *ngIf="jazykInput.invalid && jazykInput.touched" class="red" align="start">
-          Jazyk musi byt zadan
-        </md-hint>
-      </md-input-container>
+      <div class="info" [ngClass]="{'visible': hintVisible }">
+        {{hint}}
+      </div>
     </div>
   </div>
   <div class="row">
     <md-input-container>
-          <textarea mdInput mdTextareaAutosize placeholder="Postavy" name="postavy" [ngModel]="data.postavy" #postavyInput="ngModel">
+          <textarea #postavy mdInput mdTextareaAutosize placeholder="Postavy" name="postavy" [ngModel]="data.postavy"
+                    #postavyInput="ngModel"
+                    (focus)="showHint('postavy')" (blur)="hideHint()"
+                    (mouseenter)="showHint('postavy')" (mouseleave)="hideHint(postavy)">
           </textarea>
     </md-input-container>
   </div>
   <div class="row">
     <md-input-container>
-          <textarea mdInput mdTextareaAutosize placeholder="Obsah" name="obsah" [ngModel]="data.obsah" #obsahInput="ngModel">
+          <textarea #obsah mdInput mdTextareaAutosize placeholder="Obsah" name="obsah" [ngModel]="data.obsah" #obsahInput="ngModel"
+                    (focus)="showHint('obsah')" (blur)="hideHint()"
+                    (mouseenter)="showHint('obsah')" (mouseleave)="hideHint(obsah)">
           </textarea>
     </md-input-container>
   </div>
   <div class="row">
     <md-input-container>
-          <textarea mdInput mdTextareaAutosize placeholder="Tema" name="tema" [ngModel]="data.tema" #temaInput="ngModel">
+          <textarea #tema mdInput mdTextareaAutosize placeholder="Tema" name="tema" [ngModel]="data.tema" #temaInput="ngModel"
+                    (focus)="showHint('tema')" (blur)="hideHint()"
+                    (mouseenter)="showHint('tema')" (mouseleave)="hideHint(tema)">
           </textarea>
     </md-input-container>
   </div>
   <div class="row">
     <md-input-container>
-          <textarea mdInput mdTextareaAutosize placeholder="Hodnoceni" name="hodnoceni" [ngModel]="data.hodnoceni"
-                    #hodnoceniInput="ngModel">
+          <textarea #hodnoceni mdInput mdTextareaAutosize placeholder="Hodnoceni" name="hodnoceni" [ngModel]="data.hodnoceni"
+                    #hodnoceniInput="ngModel"
+                    (focus)="showHint('hodnoceni')" (blur)="hideHint()"
+                    (mouseenter)="showHint('hodnoceni')" (mouseleave)="hideHint(hodnoceni)">
           </textarea>
     </md-input-container>
   </div>

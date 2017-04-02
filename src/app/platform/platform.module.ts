@@ -11,6 +11,7 @@ import { BookPreviewComponent } from './book-preview/book-preview.component';
 import { EducationComponent } from './education/education.component';
 import { ShelvesComponent } from './shelves/shelves.component';
 import { ShelfComponent } from './shelf/shelf.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { ShelfComponent } from './shelf/shelf.component';
     EducationComponent,
     ShelvesComponent,
     ShelfComponent,
+    ProfileComponent,
   ],
   exports: []
 })
