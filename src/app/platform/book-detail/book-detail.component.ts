@@ -19,7 +19,7 @@ import { EducationModel } from '../../shared/models/education.model';
 import { Shelf } from '../../shared/models/shelf.model';
 import { shelvesActions } from '../../reducers/shelves.reducer';
 import { trackingActions } from '../../reducers/tracking.reducer';
-import { StoredTracking } from '../../shared/models/tracking.model';
+import { StoredReading } from '../../shared/models/tracking.model';
 import * as moment from 'moment';
 
 @Component({
@@ -53,11 +53,14 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
   shelves: Shelf[] = [];
   inShelves: number[] = [];
   newShelf = '';
-  trackings: StoredTracking = {
-    trackings: [],
-    lastTracking: null
+  trackings: StoredReading = {
+    readings: [],
+    lastInterval: null
   };
   tracked: string = '';
+  updateDetail = false;
+  showTimetamp = false;
+  updateLatest = false;
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router, private http: Http) {
     this.dispatcher = new ComponentDispatcher(store, this);
@@ -112,12 +115,17 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     this.subscriptions.push(
       booksData.subscribe(
         (data: SquirrelData<Book>) => {
-          console.log('book data', data.data);
-          if (data.data.length) {
+          if (data.data.length && !data.loading) {
             this.bookInfo = data.data[0];
             if (this.bookInfo.inBooks) {
               console.log('getting tracking');
               this.dispatcher.dispatch(trackingActions.API_GET, this.id);
+            }
+
+            if (this.updateLatest) {
+              console.log('updating latest because it was closed by changing status');
+              this.dispatcher.dispatch(trackingActions.ADDITIONAL.API_GET_LAST);
+              this.updateLatest = false;
             }
           }
           this.insertLoading = data.loading;
@@ -135,11 +143,9 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     this.subscriptions.push(
       commentsData.subscribe(
         (data: SquirrelData<DiaryComment>) => {
-          console.log('comments data', data.data);
           if (this.user) {
             this.comments = data.data;
             this.userComment = this.comments.find(comment => comment.userId === this.user.id);
-            console.log('user comment', this.userComment);
             if (!this.userComment) {
               this.userComment = {
                 date: 'date',
@@ -166,7 +172,6 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     this.subscriptions.push(
       userData.subscribe(
         (data: SquirrelData<User>) => {
-          console.log('user data', data.data);
           if (data.data.length) {
             this.user = data.data[0];
           }
@@ -184,11 +189,9 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     this.subscriptions.push(
       shelvesData.subscribe(
         (data: SquirrelData<Shelf>) => {
-          console.log('shelves', data.data);
           this.newShelf = '';
           this.shelves = data.data;
           this.inShelves = this.shelves.filter(shelve => shelve.books.some(book => book.id === this.id)).map(shelve => shelve.id);
-          console.log('in shelves', this.inShelves);
         })
     );
 
@@ -202,21 +205,31 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
 
     this.subscriptions.push(
       trackingData.subscribe(
-        (data: SquirrelData<StoredTracking>) => {
-          if (data.data.length) {
+        (data: SquirrelData<StoredReading>) => {
+          if (data.data.length && !data.loading) {
+            console.log('tracking DATA', data.data);
             this.trackings = data.data[0];
-            console.log('start', moment(this.trackings.lastTracking.start).format('hh:mm:ss'));
-            console.log('now', moment().format('hh:mm:ss'));
+            if (this.trackings.lastInterval.start) {
+              if (this.id !== this.trackings.lastInterval.bookId) {
+                this.showTimetamp = false;
+              } else {
+                this.showTimetamp = !this.trackings.lastInterval.completed;
+              }
+            }
+            if (this.updateDetail) {
+              this.dispatcher.dispatch(booksActions.ADDITIONAL.GET_SINGLE, this.id);
+              this.updateDetail = false;
+            }
           }
         })
     );
 
     setInterval(() => {
-      if (this.trackings && this.trackings.lastTracking) {
-        if (this.trackings.lastTracking.end === '0001-01-01T00:00:00Z' && this.trackings.lastTracking.bookId === this.id) {
-          this.tracked = moment(moment().diff(moment(this.trackings.lastTracking.start))).format('hh:mm:ss');
-          // console.log('tracked', this.tracked);
-        }
+      if (this.showTimetamp) {
+        let now = moment();
+        let diff = now.diff(moment(this.trackings.lastInterval.start));
+        this.tracked = moment.utc(moment.duration(diff).asMilliseconds()).format("HH:mm:ss");
+        console.log('tracked time', this.tracked, this.trackings.lastInterval.completed, this.showTimetamp);
       }
     }, 1000);
 
@@ -264,6 +277,15 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
   }
 
   changeStatus(status: number) {
+    if (this.bookInfo.status === status) {
+      return;
+    }
+    if (this.bookInfo.status === BookStatus.READING && status !== BookStatus.READ) {
+      return;
+    }
+    if (status === BookStatus.READ && this.trackings.lastInterval.bookId === this.id) {
+      this.updateLatest = true;
+    }
     this.bookInfo.status = status;
     this.dispatcher.dispatch(booksActions.API_UPDATE, this.bookInfo);
   }
@@ -322,25 +344,15 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
   }
 
   startTracking() {
+    this.dispatcher.dispatch(trackingActions.ADDITIONAL.API_START, {id: this.id, readings: true});
+    // update only if book wasnt reading
     if (this.bookInfo.status !== BookStatus.READING) {
-      // this.changeStatus(BookStatus.READING);
+      this.updateDetail = true;
     }
-    this.dispatcher.dispatch(trackingActions.ADDITIONAL.START, this.id);
   }
 
   stopTracking() {
-    this.dispatcher.dispatch(trackingActions.ADDITIONAL.END, this.id);
-  }
-
-  get shouldStart(): boolean {
-    if (!this.trackings.lastTracking) {
-      return false;
-    }
-    if (this.trackings.lastTracking.end !== '0001-01-01T00:00:00Z') {
-      return true;
-    } else {
-      return this.trackings.lastTracking.bookId === this.id ? false : true;
-    }
+    this.dispatcher.dispatch(trackingActions.ADDITIONAL.API_END, {id: this.id, readings: true});
   }
 
 }

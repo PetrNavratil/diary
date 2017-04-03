@@ -19,6 +19,7 @@ import { DropdownRowComponent } from './dropdown-row/dropdown-row.component';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { TruncatePipe } from './truncate.pipe';
 import { MyInputComponent } from './my-input/my-input.component';
+import { TrackingBarComponent } from './tracking-bar/tracking-bar.component';
 
 @NgModule({
   imports: [
@@ -43,7 +44,8 @@ import { MyInputComponent } from './my-input/my-input.component';
     DropdownRowComponent,
     DropdownComponent,
     TruncatePipe,
-    MyInputComponent
+    MyInputComponent,
+    TrackingBarComponent
   ],
   exports: [
     BrowserModule,
@@ -65,7 +67,8 @@ import { MyInputComponent } from './my-input/my-input.component';
     DropdownRowComponent,
     DropdownComponent,
     TruncatePipe,
-    MyInputComponent
+    MyInputComponent,
+    TrackingBarComponent
   ]
 })
 export class SharedModule {

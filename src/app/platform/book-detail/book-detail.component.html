@@ -11,10 +11,12 @@
                             *ngIf="bookInfo.inBooks" (click)="removeBook()"></app-loading-button>
         <app-loading-button [icon]="'play_circle_outline'" [color]="'primary'" class="button action-item" [loading]="false"
                             [title]="'Start tracking'"
-                            *ngIf="bookInfo.inBooks && shouldStart" (click)="startTracking()"></app-loading-button>
+                            *ngIf="bookInfo.inBooks && trackings?.lastInterval?.id >= 0 && !showTimetamp"
+                            (click)="startTracking()"></app-loading-button>
         <app-loading-button [icon]="'stop'" [color]="'warn'" class="button action-item" [loading]="false"
                             [title]="'Stop tracking ' + tracked"
-                            *ngIf="bookInfo.inBooks && !shouldStart" (click)="stopTracking()"></app-loading-button>
+                            *ngIf="bookInfo.inBooks && trackings?.lastInterval?.id >= 0 && showTimetamp"
+                            (click)="stopTracking()"></app-loading-button>
         <app-dropdown class="action-item" [buttonTitle]="bookInfo.status | bookStatus" [closeOnClick]="true" [disabled]="!bookInfo.inBooks">
           <div class="action-dropdown">
             <div class="item" *ngFor="let item of [0,1,2,3]" (click)="changeStatus(item)"

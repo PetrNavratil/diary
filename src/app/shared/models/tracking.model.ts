@@ -1,13 +1,23 @@
-export interface Tracking {
+export interface Reading {
   id: number;
   start: string;
-  end: string;
+  stop: string;
   bookId: number;
+  userId: number;
   title?: string;
-  author: string;
+  author?: string;
+  completed: boolean;
+  intervals: Interval[];
+
 }
 
-export interface StoredTracking {
-  lastTracking: Tracking;
-  trackings: Tracking[];
+export interface StoredReading {
+  lastInterval: Reading;
+  readings: Reading[];
+}
+
+interface Interval {
+  start: string;
+  stop: string;
+  readingId: number;
 }

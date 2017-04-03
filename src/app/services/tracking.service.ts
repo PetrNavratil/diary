@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { ReplaySubject } from 'rxjs';
-import { Tracking } from '../shared/models/tracking.model';
+import { Reading } from '../shared/models/tracking.model';
 
 @Injectable()
 export class TrackingService {
@@ -9,5 +9,5 @@ export class TrackingService {
 
   }
 
-  lastTracking: ReplaySubject<Tracking>;
+  lastTracking: ReplaySubject<Reading>;
 }
