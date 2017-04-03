@@ -14,6 +14,8 @@ export class BookStatusPipe {
         return 'Reading';
       case BookStatus.READ:
         return 'Read';
+      case BookStatus.ALL:
+        return 'All';
       default:
         return 'Not read';
     }
