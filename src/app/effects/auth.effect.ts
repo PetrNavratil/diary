@@ -6,6 +6,7 @@ import { Action } from '@ngrx/store';
 import { environment } from '../../environments/environment';
 import { authActions } from '../reducers/auth.reducer';
 import { createOptions } from '../shared/createOptions';
+import { userActions } from '../reducers/user.reducer';
 
 const LOGIN_ENDPOINT = '/login';
 const REGISTER_ENDPOINT = '/register';
@@ -27,11 +28,11 @@ export class AuthEffect {
         return this.http.get(environment.apiUrl + USER_ENDPOINT, createOptions());
       })
       .map(body => ({
-        type: authActions.GET,
+        type: userActions.GET,
         payload: {body: [body.json()], origin: action.payload.origin}
       }))
       .catch(body => Observable.of({
-        type: authActions.API_GET_FAIL,
+        type: userActions.API_GET_FAIL,
         payload: {origin: action.payload.origin, body: body.json().message}
       })));
 
@@ -44,20 +45,20 @@ export class AuthEffect {
         return this.http.get(environment.apiUrl + USER_ENDPOINT, createOptions());
       })
       .map(body => ({
-        type: authActions.GET,
+        type: userActions.GET,
         payload: {body: [body.json()], origin: action.payload.origin}
       }))
       .catch(body => Observable.of({
-        type: authActions.API_GET_FAIL,
+        type: userActions.API_GET_FAIL,
         payload: {origin: action.payload.origin, body: body.json().message}
       })));
 
-  @Effect() auth = this.actions.ofType((<any>authActions.ADDITIONAL).AUTH)
-    .switchMap(action => this.http.get(environment.apiUrl + USER_ENDPOINT, createOptions())
-      .map(body => ({type: authActions.GET, payload: {origin: action.payload.origin, body: [body.json()]}}))
-      .catch(body => Observable.of({
-        type: authActions.API_GET_FAIL,
-        payload: {origin: action.payload.origin, body: body.json().message}
-      })));
+  // @Effect() auth = this.actions.ofType((<any>authActions.ADDITIONAL).AUTH)
+  //   .switchMap(action => this.http.get(environment.apiUrl + USER_ENDPOINT, createOptions())
+  //     .map(body => ({type: authActions.GET, payload: {origin: action.payload.origin, body: [body.json()]}}))
+  //     .catch(body => Observable.of({
+  //       type: authActions.API_GET_FAIL,
+  //       payload: {origin: action.payload.origin, body: body.json().message}
+  //     })));
 
 }

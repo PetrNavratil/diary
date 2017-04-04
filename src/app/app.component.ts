@@ -5,6 +5,7 @@ import { ComponentDispatcher, squirrel, SquirrelData } from '@flowup/squirrel';
 import { authActions } from './reducers/auth.reducer';
 import { User } from './shared/models/user.model';
 import { Router } from '@angular/router';
+import { usersReducer, userActions } from './reducers/user.reducer';
 
 @Component({
   selector: 'app-root',
@@ -19,9 +20,9 @@ export class AppComponent implements OnDestroy {
 
   constructor(private router: Router, private store: Store <AppState>) {
     this.dispatcher = new ComponentDispatcher(store, this);
-    this.dispatcher.dispatch((<any>authActions.ADDITIONAL).AUTH);
+    this.dispatcher.dispatch(userActions.API_GET);
 
-    let {dataStream, errorStream} = squirrel(store, 'auth', this);
+    let {dataStream, errorStream} = squirrel(store, 'users', this);
     this.subscriptions.push(
       dataStream.subscribe(
         (data: SquirrelData<User>) => {

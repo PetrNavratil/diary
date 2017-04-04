@@ -76,7 +76,7 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     let {dataStream: booksData, errorStream: booksError} = squirrel(store, 'books', this);
     let {dataStream: detailData, errorStream: detailError} = squirrel(store, 'detail', this);
     let {dataStream: commentsData, errorStream: commentsError} = squirrel(store, 'comments', this);
-    let {dataStream: userData, errorStream: userError} = squirrel(store, 'auth', this);
+    let {dataStream: userData, errorStream: userError} = squirrel(store, 'users', this);
     let {dataStream: shelvesData, errorStream: shelvesError} = squirrel(store, 'shelves', this);
     let {dataStream: trackingData, errorStream: trackingError} = squirrel(store, 'tracking', this);
     this.subscriptions.push(

@@ -17,7 +17,7 @@ export class ProfileComponent implements OnDestroy {
 
   constructor(private store: Store<AppState>) {
     this.dispatcher = new ComponentDispatcher(store, this);
-    let {dataStream, errorStream} = squirrel(store, 'auth', this);
+    let {dataStream, errorStream} = squirrel(store, 'users', this);
     this.subscriptions.push(
       dataStream.subscribe(
         (data: SquirrelData<User>) => {
@@ -39,5 +39,10 @@ export class ProfileComponent implements OnDestroy {
   editPassword() {
 
   }
+
+  editUser() {
+
+  }
+
 
 }

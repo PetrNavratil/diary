@@ -5,6 +5,7 @@ import { ComponentDispatcher, squirrel, SquirrelData } from '@flowup/squirrel';
 import { StoredReading, Reading } from '../models/tracking.model';
 import { trackingActions } from '../../reducers/tracking.reducer';
 import * as moment from 'moment'
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-tracking-bar',
@@ -20,11 +21,21 @@ export class TrackingBarComponent {
 
   constructor(private store: Store<AppState>) {
     this.dispatcher = new ComponentDispatcher(store, this);
-    let {dataStream, errorStream} = squirrel(store, 'tracking', this);
-    this.dispatcher.dispatch(trackingActions.ADDITIONAL.API_GET_LAST);
+    let {dataStream: trackingData, errorStream: trackingError} = squirrel(store, 'tracking', this);
+    let {dataStream: userData, errorStream: userError} = squirrel(store, 'users', this);
 
     this.subscriptions.push(
-      dataStream.subscribe(
+      userData.subscribe(
+        (data: SquirrelData<User>) => {
+          if (data.data.length) {
+            this.dispatcher.dispatch(trackingActions.ADDITIONAL.API_GET_LAST);
+          }
+        }
+      ));
+
+
+    this.subscriptions.push(
+      trackingData.subscribe(
         (data: SquirrelData<StoredReading>) => {
           if (data.data[0].lastInterval.bookId > 0) {
             this.reading = data.data[0].lastInterval;
@@ -32,7 +43,7 @@ export class TrackingBarComponent {
         }
       ));
     this.subscriptions.push(
-      errorStream.subscribe(
+      trackingError.subscribe(
         (error: Error) => {
           console.error(error);
         }
