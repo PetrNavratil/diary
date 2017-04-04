@@ -37,13 +37,6 @@ $photo-margin: 40px;
         .detail-input {
           width: calc(50% + #{$photo-size} + #{$photo-margin});
         }
-        .buttons {
-          display: flex;
-          justify-content: flex-end;
-          .button {
-            margin-left: 20px;
-          }
-        }
       }
       .dropdown {
         .buttons {
@@ -52,6 +45,7 @@ $photo-margin: 40px;
           cursor: default;
           .button {
             margin-left: 20px;
+            height: 36px;
           }
         }
         .password-change {
@@ -72,9 +66,18 @@ $photo-margin: 40px;
               }
 
             }
+            .right {
+              display: flex;
+              flex-direction: column;
+
+            }
             .submit {
               padding-bottom: 16px;
               margin-left: 10px;
+              height: 36px;
+              .button {
+
+              }
             }
           }
 

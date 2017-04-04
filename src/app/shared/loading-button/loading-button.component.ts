@@ -13,4 +13,5 @@ export class LoadingButtonComponent {
   @Input() color = 'primary';
   @Input() icon = '';
   @Input() title = '';
+  @Input() disabled = false;
 }

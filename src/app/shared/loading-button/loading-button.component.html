@@ -1,4 +1,4 @@
-<button md-raised-button color="{{color}}">
+<button md-raised-button color="{{color}}" [disabled]="disabled">
   <span *ngIf="!loading && title.length">{{title}}</span>
   <i class="material-icons" *ngIf="!loading && icon.length">{{icon}}</i>
   <md-spinner *ngIf="loading"></md-spinner>

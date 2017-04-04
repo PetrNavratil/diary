@@ -5,7 +5,12 @@
         <div class="photo-row">
           <img class="photo" src="assets/photo.png">
           <md-input-container class="nickname">
-            <input mdInput type="text" placeholder="Nickname" [(ngModel)]="user.userName">
+            <input
+              mdInput
+              type="text"
+              placeholder="Nickname"
+              [disabled]="true"
+              [ngModel]="user.userName">
           </md-input-container>
         </div>
         <div class="details">
@@ -38,10 +43,17 @@
         <app-dropdown-row class="dropdown">
           <div class="buttons" row-header>
             <button class="button" md-raised-button color="primary">Change password</button>
-            <button class="button" md-raised-button color="primary" [disabled]="email.invalid">Submit changes</button>
+            <app-loading-button
+              class="button"
+              [color]="'primary'"
+              [loading]="loading"
+              [title]="'Submit changes'"
+              [disabled]="email.invalid"
+              (click)="editUser($event)">
+            </app-loading-button>
           </div>
           <div class="password-change" dropdown-content>
-            <form novalidate #f="ngForm" (ngSubmit)="editPassword(f)" class="password-form">
+            <form novalidate #f="ngForm" (ngSubmit)="editPassword(f.value)" class="password-form">
               <div class="password-inputs">
                 <md-input-container class="password-input"
                                     [dividerColor]="oldPassword.invalid && oldPassword.touched ? 'warn' : 'primary'">
@@ -93,9 +105,22 @@
                   </md-hint>
                 </md-input-container>
               </div>
-              <div class="submit">
-                <button type="submit" md-raised-button color="primary" [disabled]="f.invalid">Save new password</button>
+              <div class="right">
+                <div class="error" *ngIf="errorMessage.length">
+                  {{errorMessage}}
+                </div>
+                <div class="submit">
+                  <app-loading-button
+                    class="button"
+                    [color]="'primary'"
+                    [loading]="passwordLoading"
+                    [title]="'Save new password'"
+                    [disabled]="f.invalid"
+                  >
+                  </app-loading-button>
+                </div>
               </div>
+
             </form>
           </div>
         </app-dropdown-row>

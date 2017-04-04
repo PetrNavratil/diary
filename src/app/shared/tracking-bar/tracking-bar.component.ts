@@ -18,6 +18,7 @@ export class TrackingBarComponent {
   subscriptions: any[] = [];
   reading: Reading;
   time: string = '';
+  getLast: boolean = true;
 
   constructor(private store: Store<AppState>) {
     this.dispatcher = new ComponentDispatcher(store, this);
@@ -27,7 +28,8 @@ export class TrackingBarComponent {
     this.subscriptions.push(
       userData.subscribe(
         (data: SquirrelData<User>) => {
-          if (data.data.length) {
+          if (this.getLast && data.data.length && !data.loading) {
+            this.getLast = false;
             this.dispatcher.dispatch(trackingActions.ADDITIONAL.API_GET_LAST);
           }
         }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { Http, RequestOptionsArgs } from '@angular/http';
+import { Http } from '@angular/http';
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { environment } from '../../environments/environment';
@@ -32,7 +32,7 @@ export class AuthEffect {
         payload: {body: [body.json()], origin: action.payload.origin}
       }))
       .catch(body => Observable.of({
-        type: userActions.API_GET_FAIL,
+        type: authActions.API_GET_FAIL,
         payload: {origin: action.payload.origin, body: body.json().message}
       })));
 
@@ -49,16 +49,7 @@ export class AuthEffect {
         payload: {body: [body.json()], origin: action.payload.origin}
       }))
       .catch(body => Observable.of({
-        type: userActions.API_GET_FAIL,
+        type: authActions.API_GET_FAIL,
         payload: {origin: action.payload.origin, body: body.json().message}
       })));
-
-  // @Effect() auth = this.actions.ofType((<any>authActions.ADDITIONAL).AUTH)
-  //   .switchMap(action => this.http.get(environment.apiUrl + USER_ENDPOINT, createOptions())
-  //     .map(body => ({type: authActions.GET, payload: {origin: action.payload.origin, body: [body.json()]}}))
-  //     .catch(body => Observable.of({
-  //       type: authActions.API_GET_FAIL,
-  //       payload: {origin: action.payload.origin, body: body.json().message}
-  //     })));
-
 }
