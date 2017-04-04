@@ -25,10 +25,12 @@ export class AppComponent implements OnDestroy {
     this.subscriptions.push(
       dataStream.subscribe(
         (data: SquirrelData<User>) => {
-          if (this.router.url === '/' || this.router.url.indexOf('landing') >= 0) {
-            this.router.navigate(['/platform']);
-          } else {
-            this.router.navigate([this.router.url]);
+          if (data.data.length) {
+            if (this.router.url === '/' || this.router.url.indexOf('landing') >= 0) {
+              this.router.navigate(['/platform']);
+            } else {
+              this.router.navigate([this.router.url]);
+            }
           }
         }
       )

@@ -15,10 +15,7 @@ const USER_ENDPOINT = '/user';
 @Injectable()
 export class AuthEffect {
 
-  options: RequestOptionsArgs;
-
   constructor(private actions: Actions, private http: Http) {
-    this.options = createOptions();
   }
 
   @Effect() login: Observable<Action> = this.actions
@@ -27,8 +24,7 @@ export class AuthEffect {
       .flatMap(res => {
         res = res.json();
         localStorage.setItem('id_token', (<any>res).token);
-        this.options = createOptions();
-        return this.http.get(environment.apiUrl + USER_ENDPOINT, this.options);
+        return this.http.get(environment.apiUrl + USER_ENDPOINT, createOptions());
       })
       .map(body => ({
         type: authActions.GET,
@@ -45,8 +41,7 @@ export class AuthEffect {
       .flatMap(res => {
         res = res.json();
         localStorage.setItem('id_token', (<any>res).token);
-        this.options = createOptions();
-        return this.http.get(environment.apiUrl + USER_ENDPOINT, this.options);
+        return this.http.get(environment.apiUrl + USER_ENDPOINT, createOptions());
       })
       .map(body => ({
         type: authActions.GET,
@@ -58,7 +53,7 @@ export class AuthEffect {
       })));
 
   @Effect() auth = this.actions.ofType((<any>authActions.ADDITIONAL).AUTH)
-    .switchMap(action => this.http.get(environment.apiUrl + USER_ENDPOINT, this.options)
+    .switchMap(action => this.http.get(environment.apiUrl + USER_ENDPOINT, createOptions())
       .map(body => ({type: authActions.GET, payload: {origin: action.payload.origin, body: [body.json()]}}))
       .catch(body => Observable.of({
         type: authActions.API_GET_FAIL,

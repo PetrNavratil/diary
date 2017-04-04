@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ComponentDispatcher, squirrel, SquirrelData } from '@flowup/squirrel';
 import { AppState } from '../../shared/models/store-model';
 import { Store } from '@ngrx/store';
@@ -12,7 +12,7 @@ import { BookStatus } from '../../shared/models/book-status.enum';
   templateUrl: './my-books.component.html',
   styleUrls: ['./my-books.component.scss']
 })
-export class MyBooksComponent {
+export class MyBooksComponent implements OnDestroy {
 
   dispatcher: ComponentDispatcher;
   subscriptions: any[] = [];
@@ -62,6 +62,12 @@ export class MyBooksComponent {
     event.stopPropagation();
     this.pattern = '';
     this.selectedBooks = this.selectBooks(this.selected);
+  }
+
+  ngOnDestroy() {
+    for (let subscription of this.subscriptions) {
+      subscription.unsubscribe();
+    }
   }
 
 }

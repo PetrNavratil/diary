@@ -25,6 +25,8 @@ import { shelvesReducer } from './reducers/shelves.reducer';
 import { ShelvesEffect } from './effects/shelves.effect';
 import { trackingReducer } from './reducers/tracking.reducer';
 import { TrackingEffect } from './effects/tracking.effect';
+import { usersReducer } from './reducers/user.reducer';
+import { UserEffect } from './effects/user.effect';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,8 @@ import { TrackingEffect } from './effects/tracking.effect';
       books: booksReducer,
       comments: commentReducer,
       shelves: shelvesReducer,
-      tracking: trackingReducer
+      tracking: trackingReducer,
+      users: usersReducer
     }),
     EffectsModule.runAfterBootstrap(SearchEffect),
     EffectsModule.runAfterBootstrap(BookDetail),
@@ -55,6 +58,7 @@ import { TrackingEffect } from './effects/tracking.effect';
     EffectsModule.runAfterBootstrap(CommentsEffect),
     EffectsModule.runAfterBootstrap(ShelvesEffect),
     EffectsModule.runAfterBootstrap(TrackingEffect),
+    EffectsModule.runAfterBootstrap(UserEffect),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
 
 
