@@ -3,7 +3,7 @@ import { AppState } from '../../shared/models/store-model';
 import { Store } from '@ngrx/store';
 import { GRBook, GRSimilarBook } from '../../shared/models/goodreadsBook.model';
 import * as Tether from 'tether';
-import { ComponentDispatcher, squirrel, SquirrelData, foxy, SquirrelState } from '@flowup/squirrel';
+import { ComponentDispatcher, squirrel, SquirrelData } from '@flowup/squirrel';
 import { ActivatedRoute, Router } from '@angular/router';
 import { detailActions } from '../../reducers/book-detail.reducer';
 import { booksActions } from '../../reducers/books.reducer';
@@ -19,8 +19,9 @@ import { EducationModel } from '../../shared/models/education.model';
 import { Shelf } from '../../shared/models/shelf.model';
 import { shelvesActions } from '../../reducers/shelves.reducer';
 import { trackingActions } from '../../reducers/tracking.reducer';
-import { StoredReading } from '../../shared/models/tracking.model';
+import { StoredReading, Interval } from '../../shared/models/tracking.model';
 import * as moment from 'moment';
+import 'moment/locale/cs';
 
 @Component({
   selector: 'app-book-detail',
@@ -57,12 +58,13 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     readings: [],
     lastInterval: null
   };
-  tracked: string = '';
   updateDetail = false;
   showTimetamp = false;
   updateLatest = false;
+  selectedReading = -1;
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router, private http: Http) {
+    moment.locale('cs');
     this.dispatcher = new ComponentDispatcher(store, this);
     this.route.params.subscribe(params => {
       this.id = +params['id'];
@@ -209,6 +211,7 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
           if (data.data.length && !data.loading) {
             console.log('tracking DATA', data.data);
             this.trackings = data.data[0];
+            this.selectedReading = this.trackings.readings.length ? this.trackings.readings.length - 1 : -1;
             if (this.trackings.lastInterval.start) {
               if (this.id !== this.trackings.lastInterval.bookId) {
                 this.showTimetamp = false;
@@ -223,16 +226,6 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
           }
         })
     );
-
-    setInterval(() => {
-      if (this.showTimetamp) {
-        let now = moment();
-        let diff = now.diff(moment(this.trackings.lastInterval.start));
-        this.tracked = moment.utc(moment.duration(diff).asMilliseconds()).format("HH:mm:ss");
-        console.log('tracked time', this.tracked, this.trackings.lastInterval.completed, this.showTimetamp);
-      }
-    }, 1000);
-
   }
 
   ngOnDestroy() {
@@ -355,4 +348,155 @@ export class BookDetailComponent implements OnInit, AfterViewChecked, OnDestroy 
     this.dispatcher.dispatch(trackingActions.ADDITIONAL.API_END, {id: this.id, readings: true});
   }
 
+  get readingInterval() {
+    if (this.trackings.readings[this.selectedReading].completed) {
+      return `${moment(this.trackings.readings[this.selectedReading].start).format('LLL')}
+         - ${moment(this.trackings.readings[this.selectedReading].stop).format('LLL')}`;
+    } else {
+      return moment(this.trackings.readings[this.selectedReading].start).format('LLL');
+    }
+  }
+
+  get wholeReadingTime() {
+    let time = 0;
+    for (let reading of this.trackings.readings) {
+      time = time + this.getIntervalHours(reading.intervals);
+    }
+    return moment.utc(moment.duration(time).asMilliseconds()).format("HH:mm");
+  }
+
+  selectReading(index: number) {
+    this.selectedReading = index;
+  }
+
+  getTime(timestamp: string) {
+    return timestamp !== '0001-01-01T00:00:00Z' ? moment(timestamp).format('LLL') : '-';
+  }
+
+  getDuration(start: string, stop: string) {
+    if (stop === '0001-01-01T00:00:00Z') {
+      return '-';
+    }
+    let duration = moment.duration(moment(stop).diff(moment(start)));
+    return this.getDurationFormat(duration);
+  }
+
+  getIntervalHours(intervals: Interval[]) {
+    let time = 0;
+    for (let interval of intervals) {
+      if (interval.stop !== '0001-01-01T00:00:00Z') {
+        time = time + moment(interval.stop).diff(interval.start);
+      }
+    }
+    return time;
+  }
+
+  get readingTime() {
+    let duration = moment
+      .duration(this.getIntervalHours(this.trackings.readings[this.selectedReading].intervals));
+    return this.getDurationFormat(moment.duration(this.getIntervalHours(this.trackings.readings[this.selectedReading].intervals)));
+  }
+
+  getDurationFormat(time: moment.Duration) {
+    let formatted: string = '';
+    if (time.years()) {
+      switch (time.years()) {
+        case 1:
+          formatted = '1 rok ';
+          break;
+        case 2:
+        case 3:
+        case 4:
+          formatted = `${time.years()} roky `;
+          break;
+        default:
+          formatted = `${time.years()} let `;
+      }
+    }
+    if (time.months()) {
+      switch (time.months()) {
+        case 1:
+          formatted += '1 měsíc ';
+          break;
+        case 2:
+        case 3:
+        case 4:
+          formatted += `${time.months()} měsíce `;
+          break;
+        default:
+          formatted += `${time.months()} měsíců `;
+      }
+    }
+    if (time.weeks()) {
+      switch (time.weeks()) {
+        case 1:
+          formatted += '1 týden ';
+          break;
+        case 2:
+        case 3:
+        case 4:
+          formatted += `${time.weeks()} týdny `;
+          break;
+        default:
+          formatted += `${time.weeks()} měsíců `;
+      }
+    }
+    if (time.days()) {
+      switch (time.days()) {
+        case 1:
+          formatted += '1 den ';
+          break;
+        case 2:
+        case 3:
+        case 4:
+          formatted += `${time.days()} dny `;
+          break;
+        default:
+          formatted += `${time.days()} dnů `;
+      }
+    }
+    if (time.hours()) {
+      switch (time.hours()) {
+        case 1:
+          formatted += '1 hodina ';
+          break;
+        case 2:
+        case 3:
+        case 4:
+          formatted += `${time.hours()} hodiny `;
+          break;
+        default:
+          formatted += `${time.hours()} hodin `;
+      }
+    }
+    if (time.minutes()) {
+      switch (time.minutes()) {
+        case 1:
+          formatted += '1 minuta ';
+          break;
+        case 2:
+        case 3:
+        case 4:
+          formatted += `${time.minutes()} minuty `;
+          break;
+        default:
+          formatted += `${time.minutes()} minut `;
+      }
+    }
+    if (time.seconds()) {
+      switch (time.seconds()) {
+        case 1:
+          formatted += '1 sekunda ';
+          break;
+        case 2:
+        case 3:
+        case 4:
+          formatted += `${time.seconds()} sekundy `;
+          break;
+        default:
+          formatted += `${time.seconds()} sekund `;
+      }
+    }
+    return formatted;
+  }
 }

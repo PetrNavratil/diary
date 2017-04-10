@@ -16,7 +16,7 @@ export interface StoredReading {
   readings: Reading[];
 }
 
-interface Interval {
+export interface Interval {
   start: string;
   stop: string;
   readingId: number;

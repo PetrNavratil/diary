@@ -2,7 +2,7 @@
   <div class="book-detail-container">
     <div class="actions-row">
       <div class="source-name">
-        GOODREADS {{tracked}}
+        GOODREADS
       </div>
       <div class="actions" *ngIf="bookInfo">
         <app-loading-button [icon]="'add'" [color]="'primary'" [title]="'Add'" [loading]="insertLoading" class="button action-item"
@@ -14,7 +14,7 @@
                             *ngIf="bookInfo.inBooks && trackings?.lastInterval?.id >= 0 && !showTimetamp"
                             (click)="startTracking()"></app-loading-button>
         <app-loading-button [icon]="'stop'" [color]="'warn'" class="button action-item" [loading]="false"
-                            [title]="'Stop tracking ' + tracked"
+                            [title]="'Stop tracking'"
                             *ngIf="bookInfo.inBooks && trackings?.lastInterval?.id >= 0 && showTimetamp"
                             (click)="stopTracking()"></app-loading-button>
         <app-dropdown class="action-item" [buttonTitle]="bookInfo.status | bookStatus" [closeOnClick]="true" [disabled]="!bookInfo.inBooks">
@@ -75,6 +75,63 @@
 
             <div class="description">
               {{book.description}}
+            </div>
+          </div>
+        </app-card>
+        <app-card *ngIf="bookInfo?.inBooks && selectedReading !== -1">
+          <div class="reading">
+            <div class="title-row">
+              <div class="item">
+                <div class="label">období čtení</div>
+                <div class="content">{{readingInterval}}</div>
+              </div>
+              <div class="item">
+                <div class="label">status</div>
+                <div class="content">{{trackings.readings[selectedReading].completed ? (BookStatus.READ | bookStatus) : (BookStatus.READING
+                  | bookStatus) }}
+                </div>
+              </div>
+              <app-dropdown
+                [buttonTitle]="selectedReading === -1 ? 'Vyberte obdobi' : (selectedReading+1) + '. Čtení'"
+                [closeOnClick]="true"
+                [disabled]="trackings.readings.length === 0">
+                <div class="action-dropdown">
+                  <div class="item" *ngFor="let reading of trackings.readings; let i = index" (click)="selectReading(i)">
+                    <span class="name">Reading {{i+1}}.</span>
+                  </div>
+                </div>
+              </app-dropdown>
+            </div>
+            <div class="reading-info-row">
+              <div class="reading-left-column">
+                <div class="label">přečteno</div>
+                <div class="content">{{trackings.readings[selectedReading].completed ? trackings.readings.length : trackings.readings.length
+                  -1}}x
+                </div>
+                <div class="label">celková doba čtení</div>
+                <div class="content">12-14</div>
+                <div class="label">doba vlastního čtení</div>
+                <div class="content">{{wholeReadingTime}}</div>
+              </div>
+              <div class="reading-table-column">
+                <div class="reading-table" *ngIf="selectedReading > -1">
+                  <div class="table-row header-row">
+                    <div class="table-item header">OD</div>
+                    <div class="table-item header">DO</div>
+                    <div class="table-item header">CAS</div>
+                  </div>
+                  <div class="table-row" *ngFor="let item of trackings.readings[selectedReading].intervals">
+                    <div class="table-item">{{getTime(item.start)}}</div>
+                    <div class="table-item">{{getTime(item.stop)}}</div>
+                    <div class="table-item">{{getDuration(item.start, item.stop)}}</div>
+                  </div>
+                  <div class="table-row footer">
+                    <div class="table-item footer-item">Celkový čas</div>
+                    <div class="table-item footer-item"></div>
+                    <div class="table-item footer-item">{{readingTime}}</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </app-card>
